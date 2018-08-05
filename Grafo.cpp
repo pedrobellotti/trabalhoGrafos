@@ -243,8 +243,7 @@ void Grafo::sequenciaGraus(){
         sequencia.push_back(i->getGrau());
     }
     stable_sort (sequencia.begin(), sequencia.end()); //Ordena do menor para o maior
-    reverse (sequencia.begin(), sequencia.end()); //Reverte a ordem
-    for (auto it = sequencia.begin(); it != sequencia.end(); ++it)
+    for (auto it = sequencia.rbegin(); it != sequencia.rend(); ++it) //Percorre vetor ao contrario
         cout << "[" << *it << "]";
     sequencia.clear();
 }

@@ -149,7 +149,7 @@ int main (){
                 unsigned int k;
                 cout << "Digite o numero de K: ";
                 cin >> k;
-                if(g->verificaId(k)){
+                if(g->verificaRegularidade(k)){
                     cout << "O grafo é " << k << "-regular." << endl;
                     break;
                 }
