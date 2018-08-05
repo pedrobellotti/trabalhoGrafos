@@ -44,6 +44,10 @@ void Grafo::exibeInformacoes(){
     cout << "Grafo ponderado: " << (ponderado ? "Sim" : "Não") << endl;
 }
 
+unsigned int Grafo::getNumeroV(){
+    return numeroV;
+}
+
 Vertice* Grafo::getPrimeiro(){
     return primeiro;
 }
@@ -221,5 +225,43 @@ void Grafo::removeAresta(unsigned int v1, unsigned int v2){
         delete excluir;
         numeroA--;
         return;
+    }
+}
+
+//Verifica se o grafo é completo
+bool Grafo::ehCompleto(){
+    if(numeroA == (numeroV*(numeroV-1)/2))
+        return true;
+    else
+        return false;
+}
+
+//Apresenta a sequencia de graus do grafo
+void Grafo::sequenciaGraus(){
+    vector<unsigned int> sequencia;
+    for (Vertice* i = primeiro ; i != nullptr ; i=i->getProximo()){
+        sequencia.push_back(i->getGrau());
+    }
+    stable_sort (sequencia.begin(), sequencia.end()); //Ordena do menor para o maior
+    reverse (sequencia.begin(), sequencia.end()); //Reverte a ordem
+    for (auto it = sequencia.begin(); it != sequencia.end(); ++it)
+        cout << "[" << *it << "]";
+    sequencia.clear();
+}
+
+//Verifica se o grafo é K-regular
+bool Grafo::verificaRegularidade(unsigned int k){
+    for (Vertice* i = primeiro ; i != nullptr ; i=i->getProximo()){
+        if(i->getGrau() != k)
+            return false;
+    }
+    return true;
+}
+
+//Verifica o grau de um vertice
+unsigned int Grafo::verificaGrau(unsigned int g){
+    for (Vertice* i = primeiro ; i != nullptr ; i=i->getProximo()){
+        if(i->getId() == g)
+            return i->getGrau();
     }
 }

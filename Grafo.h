@@ -1,6 +1,8 @@
 #ifndef GRAFO_H_INCLUDED
 #define GRAFO_H_INCLUDED
 #include <iostream>
+#include <vector>
+#include <algorithm>
 using namespace std;
 class Vertice;
 class Aresta;
@@ -58,6 +60,7 @@ class Grafo{
         bool getPonderado();
         bool getDirecionado();
         void exibeInformacoes();
+        unsigned int getNumeroV();
         Vertice* getPrimeiro();
         void adicionaVertice(unsigned int);
         void adicionaAresta(unsigned int, unsigned int, int);
@@ -66,5 +69,9 @@ class Grafo{
         bool verificaId(unsigned int);
         void removeVertice(unsigned int);
         void removeAresta(unsigned int, unsigned int);
+        bool ehCompleto();
+        void sequenciaGraus();
+        bool verificaRegularidade(unsigned int);
+        unsigned int verificaGrau(unsigned int);
 };
 #endif // GRAFO_H_INCLUDED

@@ -42,17 +42,25 @@ int main (){
         cout << endl;
         cout << "--------------------Menu--------------------" << endl;
         cout << "[0]. Sair." << endl;
-        cout << "[1]. Imprimir informacoes do grafo." << endl;
+        cout << "[1]. Apresentar informacoes do grafo." << endl;
         cout << "[2]. Imprimir o grafo." << endl;
         cout << "[3]. Adicionar um vértice." << endl;
         cout << "[4]. Remover um vértice e suas arestas." << endl;
         cout << "[5]. Adicionar uma aresta." << endl;
         cout << "[6]. Remover uma aresta." << endl;
         cout << "[7]. Verificar adjacência de dois vértices." << endl;
+        cout << "[8]. Verificar se o grafo é completo." << endl;
+        cout << "[9]. Apresentar a sequência de graus do grafo." << endl;
+        cout << "[10]. Apresentar a ordem do grafo." << endl;
+        cout << "[11]. Verificar se o grafo K-regular." << endl;
         cout << "--------------------------------------------" << endl;
         cout << "Digite a opcão desejada: ";
         cin >> menu;
         switch (menu){
+            default:{
+                cout << "Opcão inválida!" << endl;
+                break;
+            }
             case 0: {
                 break;
             }
@@ -120,6 +128,33 @@ int main (){
                     cout << "Os vértices são adjacentes.";
                 else
                     cout << "Os vértices não são adjacentes.";
+                break;
+            }
+            case 8: {
+                if(g->ehCompleto())
+                    cout << "O grafo é completo." << endl;
+                else
+                    cout << "O grafo não é completo." << endl;
+                break;
+            }
+            case 9: {
+                g->sequenciaGraus();
+                break;
+            }
+            case 10: {
+                cout << "Ordem do grafo: " << g->getNumeroV() << endl;
+                break;
+            }
+            case 11: {
+                unsigned int k;
+                cout << "Digite o numero de K: ";
+                cin >> k;
+                if(g->verificaId(k)){
+                    cout << "O grafo é " << k << "-regular." << endl;
+                    break;
+                }
+                else
+                    cout << "O grafo não é " << k << "-regular." << endl;
                 break;
             }
         }
