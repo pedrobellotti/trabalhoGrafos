@@ -34,9 +34,21 @@ void criaGrafo(Grafo* g1, string nomeArquivo){
 }
 
 
-int main (){
+int main (int argc, char* argv[]){
+    //Confere se o numero de parametros está correto
+    if(argc != 3){
+        cout << "Número de parâmetros incorreto! Use: "<<argv[0]<<" <arquivo_entrada.txt> <arquivo_saida.txt>" << endl;
+        return 0;
+    }
+    //Guardando os nomes dos arquivos
+    string nomeEntrada = argv[1];
+    string nomeSaida = argv[2];
+    //Criando arquivo de saida
+    ofstream arquivoSaida;
+    arquivoSaida.open(nomeSaida);
+    arquivoSaida << "--Inicio do arquivo de saida--\n";
     Grafo* g = new Grafo();
-    criaGrafo(g, "testes.txt");
+    criaGrafo(g, nomeEntrada);
     unsigned short menu;
     do{
         cout << endl;
@@ -159,5 +171,8 @@ int main (){
             }
         }
     }while (menu != 0);
+    arquivoSaida << "\n--Fim do arquivo de saida--";
+    arquivoSaida.close();
+    delete g;
     return 0;
 }
