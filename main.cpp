@@ -9,10 +9,11 @@ using namespace std;
 void criaGrafo(Grafo* g1, string nomeArquivo){
     ifstream arquivo(nomeArquivo);
     string linha;
-    unsigned int numV, a1, a2, peso = 0;
+    unsigned int numV, a1, a2 = 0;
+    int peso = __INT_MAX__;
     if (arquivo.good()){ //Verifica se o arquivo esta aberto
         arquivo >> numV; //Le a primeira linha com o numero de vertices
-        for (int i = 1; i<=numV; i++){
+        for (int i = 1; i<=numV; i++){ //Comeca do 1 porque o vertice 0 nao existe nos arquivos txt
             g1->adicionaVertice(i); //Adiciona o numero lido de vertices
         }
         getline(arquivo, linha);
@@ -22,10 +23,10 @@ void criaGrafo(Grafo* g1, string nomeArquivo){
             iss >> a1 >> a2 >> peso;
             g1->adicionaAresta(a1,a2,peso);
         }
-        if(peso == 0) //Se o peso for 0 a aresta nao precisa existir em um grafo ponderado
-            g1->alteraPonderado(false);
-        else
+        if(peso != __INT_MAX__) //Se a aresta tiver peso, o grafo é ponderado
             g1->alteraPonderado(true);
+        else
+            g1->alteraPonderado(false);
     }
     else{ //Caso o arquivo nao esteja aberto, mostra um erro.
         cout << "Erro ao abrir arquivo do grafo: " << nomeArquivo << endl;
@@ -47,12 +48,13 @@ int main (int argc, char* argv[]){
     ofstream arquivoSaida;
     arquivoSaida.open(nomeSaida);
     arquivoSaida << "--Inicio do arquivo de saida--\n";
+    arquivoSaida << "Arquivo de entrada: " + nomeEntrada + "\n";
     Grafo* g = new Grafo();
     criaGrafo(g, nomeEntrada);
     unsigned short menu;
     do{
         cout << endl;
-        cout << "--------------------Menu--------------------" << endl;
+        cout << "---------------------Menu---------------------" << endl;
         cout << "[0]. Sair." << endl;
         cout << "[1]. Apresentar informacoes do grafo." << endl;
         cout << "[2]. Imprimir o grafo." << endl;
@@ -64,8 +66,8 @@ int main (int argc, char* argv[]){
         cout << "[8]. Verificar se o grafo é completo." << endl;
         cout << "[9]. Apresentar a sequência de graus do grafo." << endl;
         cout << "[10]. Apresentar a ordem do grafo." << endl;
-        cout << "[11]. Verificar se o grafo K-regular." << endl;
-        cout << "--------------------------------------------" << endl;
+        cout << "[11]. Verificar se o grafo é K-regular." << endl;
+        cout << "----------------------------------------------" << endl;
         cout << "Digite a opcão desejada: ";
         cin >> menu;
         switch (menu){
@@ -118,7 +120,10 @@ int main (int argc, char* argv[]){
                     cout << "Digite o peso da aresta: ";
                     cin >> p;
                 }
-                g->adicionaAresta(ver1,ver2,p);
+                if(g->verificaId(ver1) && g->verificaId(ver2))
+                    g->adicionaAresta(ver1,ver2,p);
+                else
+                    cout << "Algum dos vértices informados não existe no grafo!" << endl;
                 break;
             }
             case 6: {
@@ -127,7 +132,10 @@ int main (int argc, char* argv[]){
                 cin >> ver1;
                 cout << "Digite a ID do vértice destino: ";
                 cin >> ver2;
-                g->removeAresta(ver1,ver2);
+                if(g->verificaAdjacencia(ver1,ver2))
+                    g->removeAresta(ver1,ver2);
+                else
+                    cout << "A aresta não existe no grafo!" << endl;
                 break;
             }
             case 7: {

@@ -49,7 +49,7 @@ class Grafo{
     private:
         unsigned int numeroV; //Numero de vertices
         unsigned int numeroA; //Numero de arestas
-        Vertice* primeiro; //Ponteiro para o primeiro vertice da lista
+        Vertice* primeiroVertice; //Ponteiro para o primeiro vertice da lista
         bool direcionado; //Guarda se o grafo é direcionado ou nao
         bool ponderado; //Guarda se o grafo é ponderado ou nao
     public:
