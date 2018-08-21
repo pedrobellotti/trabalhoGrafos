@@ -10,7 +10,7 @@ void criaGrafo(Grafo* g1, string nomeArquivo){
     ifstream arquivo(nomeArquivo);
     string linha;
     unsigned int numV, a1, a2 = 0;
-    int peso = __INT_MAX__;
+    int peso = -1;
     if (arquivo.good()){ //Verifica se o arquivo esta aberto
         arquivo >> numV; //Le a primeira linha com o numero de vertices
         for (int i = 1; i<=numV; i++){ //Comeca do 1 porque o vertice 0 nao existe nos arquivos txt
@@ -23,7 +23,7 @@ void criaGrafo(Grafo* g1, string nomeArquivo){
             iss >> a1 >> a2 >> peso;
             g1->adicionaAresta(a1,a2,peso);
         }
-        if(peso != __INT_MAX__) //Se a aresta tiver peso, o grafo é ponderado
+        if(peso != -1) //Se a aresta tiver peso, o grafo é ponderado
             g1->alteraPonderado(true);
         else
             g1->alteraPonderado(false);
@@ -33,7 +33,6 @@ void criaGrafo(Grafo* g1, string nomeArquivo){
         exit(1);
     }
 }
-
 
 int main (int argc, char* argv[]){
     //Confere se o numero de parametros está correto
@@ -51,6 +50,19 @@ int main (int argc, char* argv[]){
     arquivoSaida << "Arquivo de entrada: " + nomeEntrada + "\n";
     Grafo* g = new Grafo();
     criaGrafo(g, nomeEntrada);
+    unsigned short dir;
+    do{
+        cout << "Informe se o grafo é direcionado, digite 0 para não direcionado ou 1 para direcionado: ";
+        cin >> dir;
+    }while(dir != 0 && dir != 1);
+    if(dir == 0)
+        g->alteraDirecionado(false);
+    else
+        g->alteraDirecionado(true);
+
+    //Variaveis do menu
+    unsigned int ver, ver1, ver2, k;
+    int peso;
     unsigned short menu;
     do{
         cout << endl;
@@ -63,10 +75,11 @@ int main (int argc, char* argv[]){
         cout << "[5]. Adicionar uma aresta." << endl;
         cout << "[6]. Remover uma aresta." << endl;
         cout << "[7]. Verificar adjacência de dois vértices." << endl;
-        cout << "[8]. Verificar se o grafo é completo." << endl;
-        cout << "[9]. Apresentar a sequência de graus do grafo." << endl;
-        cout << "[10]. Apresentar a ordem do grafo." << endl;
-        cout << "[11]. Verificar se o grafo é K-regular." << endl;
+        cout << "[8]. Verificar o grau de um vértice." << endl;
+        cout << "[9]. Verificar se o grafo é completo." << endl;
+        cout << "[10]. Apresentar a sequência de graus do grafo." << endl;
+        cout << "[11]. Apresentar a ordem do grafo." << endl;
+        cout << "[12]. Verificar se o grafo é K-regular." << endl;
         cout << "----------------------------------------------" << endl;
         cout << "Digite a opcão desejada: ";
         cin >> menu;
@@ -87,7 +100,6 @@ int main (int argc, char* argv[]){
                 break;
             }
             case 3: {
-                unsigned int ver;
                 cout << "Digite a ID do vértice para adicionar: ";
                 cin >> ver;
                 if(g->verificaId(ver)){//Sai da funcao caso o vertice já exista
@@ -99,7 +111,6 @@ int main (int argc, char* argv[]){
                 break;
             }
             case 4: {
-                unsigned int ver;
                 cout << "Digite a ID do vértice para remover: ";
                 cin >> ver;
                 if(!g->verificaId(ver)){//Sai da funcao caso o vertice nao exista
@@ -111,23 +122,21 @@ int main (int argc, char* argv[]){
                 break;
             }
             case 5: {
-                unsigned int ver1, ver2, p = 0;
                 cout << "Digite a ID do vértice origem: ";
                 cin >> ver1;
                 cout << "Digite a ID do vértice destino: ";
                 cin >> ver2;
                 if(g->getPonderado()){
                     cout << "Digite o peso da aresta: ";
-                    cin >> p;
+                    cin >> peso;
                 }
                 if(g->verificaId(ver1) && g->verificaId(ver2))
-                    g->adicionaAresta(ver1,ver2,p);
+                    g->adicionaAresta(ver1,ver2,peso);
                 else
                     cout << "Algum dos vértices informados não existe no grafo!" << endl;
                 break;
             }
             case 6: {
-                unsigned int ver1, ver2;
                 cout << "Digite a ID do vértice origem: ";
                 cin >> ver1;
                 cout << "Digite a ID do vértice destino: ";
@@ -139,7 +148,6 @@ int main (int argc, char* argv[]){
                 break;
             }
             case 7: {
-                unsigned int ver1, ver2;
                 cout << "Digite a ID do vértice origem: ";
                 cin >> ver1;
                 cout << "Digite a ID do vértice destino: ";
@@ -151,22 +159,32 @@ int main (int argc, char* argv[]){
                 break;
             }
             case 8: {
+                cout << "Digite a ID do vértice: ";
+                cin >> ver;
+                if(!g->verificaId(ver)){//Sai da funcao caso o vertice nao exista
+                    cout << "Vértice não existe no grafo!" << endl;
+                    break;
+                }
+                else
+                    cout << "O grau do vértice é: " << g->verificaGrau(ver) << endl;
+                break;
+            }
+            case 9: {
                 if(g->ehCompleto())
                     cout << "O grafo é completo." << endl;
                 else
                     cout << "O grafo não é completo." << endl;
                 break;
             }
-            case 9: {
+            case 10: {
                 g->sequenciaGraus();
                 break;
             }
-            case 10: {
+            case 11: {
                 cout << "Ordem do grafo: " << g->getNumeroV() << endl;
                 break;
             }
-            case 11: {
-                unsigned int k;
+            case 12: {
                 cout << "Digite o numero de K: ";
                 cin >> k;
                 if(g->verificaRegularidade(k)){
