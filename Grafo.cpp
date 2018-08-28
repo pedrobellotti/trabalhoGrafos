@@ -79,14 +79,14 @@ void Grafo::adicionaAresta(unsigned int idorigem, unsigned int iddestino, int pe
     }
     //Se os vertices foram encontrados, cria a aresta e adiciona no vertice origem
     if(ori != nullptr && dest != nullptr){
-        if(direcionado){
+        if(direcionado){ //Se for direcionado adiciona somente a aresta ori->dest
             Aresta* nova = new Aresta();
             nova->setDestino(dest);
             nova->setPeso(peso);
             ori->adicionaArestaAux(nova);
             numeroA++;
         }
-        else{
+        else{ //Se nao for direcionado, adiciona a aresta ori->dest e dest->ori
             Aresta* nova = new Aresta();
             Aresta* equivalente = new Aresta();
             nova->setDestino(dest);
@@ -100,6 +100,22 @@ void Grafo::adicionaAresta(unsigned int idorigem, unsigned int iddestino, int pe
     }
     else
         cout<<"Erro ao adicionar aresta: algum dos vértices não existe no grafo!"<<endl;
+}
+
+//Altera o peso de uma aresta
+void Grafo::alteraPeso(unsigned int v1, unsigned int v2, int p){
+    Vertice* i = primeiroVertice;
+    for (i ; i != nullptr ; i=i->getProximo()){
+        if(i->getId() == v1)
+            break;
+    }
+    Aresta* a = i->getPrimeira();
+    for (a ; a != nullptr ; a=a->getProxima()){
+        if(a->getDestino()->getId() == v2){
+            a->setPeso(p);
+            return;
+        }
+    }
 }
 
 //Imprime a lista de adjacencia de cada vertice
@@ -128,23 +144,64 @@ void Grafo::imprimeGrafo(){
     }
 }
 
-//Verifica adjacencia entre dois vertices do grafo
-bool Grafo::verificaAdjacencia(unsigned int v1, unsigned int v2){
-    for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
-        if(i->getId() == v1){
-            for (Aresta* a = i->getPrimeira() ; a != nullptr ; a=a->getProxima())
-                if(a->getDestino()->getId() == v2)
-                    return true;
+//Salva o grafo no arquivo txt
+void Grafo::salvaGrafo(ofstream& arquivo){
+    unsigned short salva;
+    do{
+        cout << "Deseja salvar o grafo no arquivo de saida? Digite 1 para salvar e 0 para não salvar: ";
+        cin >> salva;
+    }while(salva != 0 && salva != 1);
+    if(salva == 0) //Se o usuario nao quer salvar, sai da funcao
+        return;
+    else{
+        if (ponderado){ //se for ponderado, salva com os pesos
+            arquivo<<"\n";
+            for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
+                arquivo << "Vertice " << i->getId() << "-> ";
+                for (Aresta* a = i->getPrimeira() ; a != nullptr ; a=a->getProxima())
+                    arquivo << "(" << a->getPeso() << ")" << a->getDestino()->getId() << " | ";
+                arquivo<<"\n";
+            }
         }
-        if(i->getId() == v2){
-            for (Aresta* a = i->getPrimeira() ; a != nullptr ; a=a->getProxima())
-                if(a->getDestino()->getId() == v1)
-                    return true;
+        else
+        {
+            arquivo<<"\n";
+            for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
+                arquivo << "Vertice " << i->getId() << "-> ";
+                for (Aresta* a = i->getPrimeira() ; a != nullptr ; a=a->getProxima())
+                    arquivo << a->getDestino()->getId() << " | ";
+                arquivo<<"\n";
+            }
         }
     }
-    return false;
-    if(direcionado){
-        //fazer para grafos direcionados
+}
+
+//Verifica adjacencia entre dois vertices do grafo
+bool Grafo::verificaAdjacencia(unsigned int v1, unsigned int v2){
+    if(direcionado){ //Se for direcionado procura somente por v2 na lista de v1
+        for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
+            if(i->getId() == v1){
+                for (Aresta* a = i->getPrimeira() ; a != nullptr ; a=a->getProxima())
+                    if(a->getDestino()->getId() == v2)
+                        return true;
+            }
+        }
+        return false;
+    }
+    else{ //Se nao for direcionado procura por v2 na lista de v1 e v1 na lista de v2
+        for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
+            if(i->getId() == v1){
+                for (Aresta* a = i->getPrimeira() ; a != nullptr ; a=a->getProxima())
+                    if(a->getDestino()->getId() == v2)
+                        return true;
+            }
+            if(i->getId() == v2){
+                for (Aresta* a = i->getPrimeira() ; a != nullptr ; a=a->getProxima())
+                    if(a->getDestino()->getId() == v1)
+                        return true;
+            }
+        }
+        return false;
     }
 }
 

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <fstream>
 using namespace std;
 class Vertice;
 class Aresta;
@@ -64,7 +65,9 @@ class Grafo{
         Vertice* getPrimeiro();
         void adicionaVertice(unsigned int);
         void adicionaAresta(unsigned int, unsigned int, int);
+        void alteraPeso(unsigned int, unsigned int, int);
         void imprimeGrafo();
+        void salvaGrafo(ofstream&);
         bool verificaAdjacencia(unsigned int, unsigned int);
         bool verificaId(unsigned int);
         void removeVertice(unsigned int);
