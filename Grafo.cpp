@@ -79,11 +79,24 @@ void Grafo::adicionaAresta(unsigned int idorigem, unsigned int iddestino, int pe
     }
     //Se os vertices foram encontrados, cria a aresta e adiciona no vertice origem
     if(ori != nullptr && dest != nullptr){
-        Aresta* nova = new Aresta();
-        nova->setDestino(dest);
-        nova->setPeso(peso);
-        ori->adicionaArestaAux(nova);
-        numeroA++;
+        if(direcionado){
+            Aresta* nova = new Aresta();
+            nova->setDestino(dest);
+            nova->setPeso(peso);
+            ori->adicionaArestaAux(nova);
+            numeroA++;
+        }
+        else{
+            Aresta* nova = new Aresta();
+            Aresta* equivalente = new Aresta();
+            nova->setDestino(dest);
+            nova->setPeso(peso);
+            equivalente->setDestino(ori);
+            equivalente->setPeso(peso);
+            ori->adicionaArestaAux(nova);
+            dest->adicionaArestaAux(equivalente);
+            numeroA++;
+        }
     }
     else
         cout<<"Erro ao adicionar aresta: algum dos vértices não existe no grafo!"<<endl;
@@ -264,4 +277,29 @@ unsigned int Grafo::verificaGrau(unsigned int g){
         if(i->getId() == g)
             return i->getGrau();
     }
+}
+
+//Vizinhanca aberta de um vertice
+void Grafo::vizinhancaAberta(unsigned int id){
+    cout << "Vizinhanca aberta do vertice: ";
+    Vertice* i = primeiroVertice;
+     for (i ; i != nullptr ; i=i->getProximo()){
+        if(i->getId() == id)
+            break;
+    }
+    for (Aresta* a = i->getPrimeira(); a != nullptr; a=a->getProxima())
+        cout << a->getDestino()->getId() << " ";
+}
+
+//Vizinhanca fechada de um vertice
+void Grafo::vizinhancaFechada(unsigned int id){
+    cout << "Vizinhanca fechada do vertice: ";
+    Vertice* i = primeiroVertice;
+     for (i ; i != nullptr ; i=i->getProximo()){
+        if(i->getId() == id)
+            break;
+    }
+    cout << i->getId() << " ";
+    for (Aresta* a = i->getPrimeira(); a != nullptr; a=a->getProxima())
+        cout << a->getDestino()->getId() << " ";
 }

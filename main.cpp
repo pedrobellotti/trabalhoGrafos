@@ -49,7 +49,6 @@ int main (int argc, char* argv[]){
     arquivoSaida << "--Inicio do arquivo de saida--\n";
     arquivoSaida << "Arquivo de entrada: " + nomeEntrada + "\n";
     Grafo* g = new Grafo();
-    criaGrafo(g, nomeEntrada);
     unsigned short dir;
     do{
         cout << "Informe se o grafo é direcionado, digite 0 para não direcionado ou 1 para direcionado: ";
@@ -59,6 +58,7 @@ int main (int argc, char* argv[]){
         g->alteraDirecionado(false);
     else
         g->alteraDirecionado(true);
+    criaGrafo(g, nomeEntrada);
 
     //Variaveis do menu
     unsigned int ver, ver1, ver2, k;
@@ -66,7 +66,7 @@ int main (int argc, char* argv[]){
     unsigned short menu;
     do{
         cout << endl;
-        cout << "---------------------Menu---------------------" << endl;
+        cout << "-------------------------Menu-------------------------" << endl;
         cout << "[0]. Sair." << endl;
         cout << "[1]. Apresentar informacoes do grafo." << endl;
         cout << "[2]. Imprimir o grafo." << endl;
@@ -80,7 +80,9 @@ int main (int argc, char* argv[]){
         cout << "[10]. Apresentar a sequência de graus do grafo." << endl;
         cout << "[11]. Apresentar a ordem do grafo." << endl;
         cout << "[12]. Verificar se o grafo é K-regular." << endl;
-        cout << "----------------------------------------------" << endl;
+        cout << "[13]. Apresentar a vizinhança aberta de um vértice." << endl;
+        cout << "[14]. Apresentar a vizinhança fechada de um vértice." << endl;
+        cout << "------------------------------------------------------" << endl;
         cout << "Digite a opcão desejada: ";
         cin >> menu;
         switch (menu){
@@ -193,6 +195,28 @@ int main (int argc, char* argv[]){
                 }
                 else
                     cout << "O grafo não é " << k << "-regular." << endl;
+                break;
+            }
+            case 13:{
+                cout << "Digite a ID do vértice: ";
+                cin >> ver;
+                if(!g->verificaId(ver)){//Sai da funcao caso o vertice nao exista
+                    cout << "Vértice não existe no grafo!" << endl;
+                    break;
+                }
+                else
+                    g->vizinhancaAberta(ver);
+                break;
+            }
+            case 14:{
+                cout << "Digite a ID do vértice: ";
+                cin >> ver;
+                if(!g->verificaId(ver)){//Sai da funcao caso o vertice nao exista
+                    cout << "Vértice não existe no grafo!" << endl;
+                    break;
+                }
+                else
+                    g->vizinhancaFechada(ver);
                 break;
             }
         }

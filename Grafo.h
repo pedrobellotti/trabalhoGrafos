@@ -73,5 +73,7 @@ class Grafo{
         void sequenciaGraus();
         bool verificaRegularidade(unsigned int);
         unsigned int verificaGrau(unsigned int);
+        void vizinhancaAberta(unsigned int);
+        void vizinhancaFechada(unsigned int);
 };
 #endif // GRAFO_H_INCLUDED
