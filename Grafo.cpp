@@ -231,7 +231,9 @@ void Grafo::removeVertice(unsigned int id){
         }
         Aresta* a = i->getPrimeira();
         while(a != nullptr){
-            removeAresta(i->getId(),a->getDestino()->getId());
+            //Para grafos direcionados, basta diminuir o grau de entrada dos adjacentes,
+            //ja que as arestas serao removidas no destrutor do vertice
+            a->getDestino()->diminuiGrauEntrada();
             a = a->getProxima();
         }
     }
@@ -439,4 +441,51 @@ void Grafo::vizinhancaFechada(unsigned int id){
     cout << i->getId() << " ";
     for (Aresta* a = i->getPrimeira(); a != nullptr; a=a->getProxima())
         cout << a->getDestino()->getId() << " ";
+}
+
+//Verifica se o grafo é bipartido
+bool Grafo::verificaBipartido(){
+    //Marca todos os vertices como nao visitados (0)
+    vector<unsigned short> visitado(numeroV + 1);
+    for (Vertice *v = primeiroVertice; v != nullptr; v = v->getProximo())
+    {
+        visitado[v->getId()] = 0;
+    }
+
+    //Marca todos os vertices com 1 e seus adjacentes com 2
+    //Para direcionados, é necessario conferir se o vertice ja foi visitado pois as arestas nao sao equivalentes
+    if(direcionado){
+        for (Vertice *i = primeiroVertice; i != nullptr; i = i->getProximo())
+        {
+            if(visitado[i->getId() == 0])
+                visitado[i->getId()] = 1;
+            for (Aresta *a = i->getPrimeira(); a != nullptr; a = a->getProxima())
+            {
+                if(visitado[a->getDestino()->getId()] == 0)
+                    visitado[a->getDestino()->getId()] = 2;
+            }
+        }
+    }
+    else{
+        for (Vertice *i = primeiroVertice; i != nullptr; i = i->getProximo())
+        {
+            visitado[i->getId()] = 1;
+            for (Aresta *a = i->getPrimeira(); a != nullptr; a = a->getProxima())
+            {
+                visitado[a->getDestino()->getId()] = 2;
+            }
+        }
+    }
+
+    //Verifica se tem algum vertice com a mesma marca de seus adjacentes, se tiver nao é bipartido
+    for (Vertice *i = primeiroVertice; i != nullptr; i = i->getProximo())
+    {
+        for (Aresta *a = i->getPrimeira(); a != nullptr; a = a->getProxima())
+        {
+            if (visitado[a->getDestino()->getId()] == visitado[i->getId()])
+                return false;
+        }
+    }
+    //Se saiu do for anterior significa que todos os vertices tem marca diferente dos adjacentes, entao o grafo é bipartido
+    return true;
 }

@@ -1,4 +1,4 @@
 --Inicio do arquivo de saida--
-Arquivo de entrada: testes.txt
+Arquivo de entrada: testesB.txt
 
 --Fim do arquivo de saida--

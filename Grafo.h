@@ -89,5 +89,6 @@ class Grafo{
         unsigned int verificaGrauSaida(unsigned int);
         void vizinhancaAberta(unsigned int);
         void vizinhancaFechada(unsigned int);
+        bool verificaBipartido();
 };
 #endif // GRAFO_H_INCLUDED

@@ -83,6 +83,7 @@ int main (int argc, char* argv[]){
         cout << "[13]. Verificar se o grafo é K-regular." << endl;
         cout << "[14]. Apresentar a vizinhança aberta de um vértice." << endl;
         cout << "[15]. Apresentar a vizinhança fechada de um vértice." << endl;
+        cout << "[16]. Verificar se o grafo é bipartido." << endl;
         cout << "------------------------------------------------------" << endl;
         cout << "Digite a opcão desejada: ";
         cin >> menu;
@@ -271,6 +272,12 @@ int main (int argc, char* argv[]){
                 else
                     g->vizinhancaFechada(ver);
                 break;
+            }
+            case 16:{
+                if(g->verificaBipartido())
+                    cout << "O grafo é bipartido." << endl;
+                else
+                    cout << "O grafo não é bipartido." << endl;
             }
         }
     }while (menu != 0);
