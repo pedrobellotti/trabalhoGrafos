@@ -214,8 +214,14 @@ int main (int argc, char* argv[]){
                     cout << "Vértice não existe no grafo!" << endl;
                     break;
                 }
-                else
-                    cout << "O grau do vértice é: " << g->verificaGrau(ver) << endl;
+                else{
+                    if(g->getDirecionado()){
+                        cout << "O grau de entrada do vértice é: " << g->verificaGrauEntrada(ver) << endl;
+                        cout << "O grau de saida do vértice é: " << g->verificaGrauSaida(ver) << endl;
+                    }
+                    else
+                        cout << "O grau do vértice é: " << g->verificaGrau(ver) << endl;
+                }
                 break;
             }
             case 10: {

@@ -84,6 +84,8 @@ void Grafo::adicionaAresta(unsigned int idorigem, unsigned int iddestino, int pe
             nova->setDestino(dest);
             nova->setPeso(peso);
             ori->adicionaArestaAux(nova);
+            ori->aumentaGrauSaida();
+            dest->aumentaGrauEntrada();
             numeroA++;
         }
         else{ //Se nao for direcionado, adiciona a aresta ori->dest e dest->ori
@@ -95,6 +97,8 @@ void Grafo::adicionaAresta(unsigned int idorigem, unsigned int iddestino, int pe
             equivalente->setPeso(peso);
             ori->adicionaArestaAux(nova);
             dest->adicionaArestaAux(equivalente);
+            ori->aumentaGrau();
+            dest->aumentaGrau();
             numeroA++;
         }
     }
@@ -219,19 +223,36 @@ void Grafo::removeVertice(unsigned int id){
     Vertice* excluir = nullptr;
     Vertice* anterior = nullptr;
     //Removendo o vértice da lista de adjacencia dos outros vertices
-    for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
-            for(Aresta* a = i->getPrimeira() ; a != nullptr ; a=a->getProxima()){
-                if(a->getDestino()->getId() == id){
-                    removeAresta(i->getId(),a->getDestino()->getId());
+    if(direcionado){
+        Vertice* i = primeiroVertice;
+        for (i ; i != nullptr ; i=i->getProximo()){
+            if(i->getId() == id)
+                break;
+        }
+        Aresta* a = i->getPrimeira();
+        while(a != nullptr){
+            removeAresta(i->getId(),a->getDestino()->getId());
+            a = a->getProxima();
+        }
+    }
+    else{
+        for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
+                for(Aresta* a = i->getPrimeira() ; a != nullptr ; a=a->getProxima()){
+                    if(a->getDestino()->getId() == id){
+                        removeAresta(i->getId(),a->getDestino()->getId());
+                    }
                 }
-            }
+        }
     }
     //Encontrando o vertice
     //Se o vertice é o primeiro da lista, já exclui
     if(id == primeiroVertice->getId()){
         excluir = primeiroVertice;
         primeiroVertice = primeiroVertice->getProximo();
-        numeroA -= excluir->getGrau();
+        if(direcionado)
+            numeroA -= excluir->getGrauEntrada() + excluir->getGrauSaida();
+        else
+            numeroA -= excluir->getGrau();
         delete excluir;
         numeroV--;
         return;
@@ -251,7 +272,10 @@ void Grafo::removeVertice(unsigned int id){
     }
     else{
         anterior->setProximo(excluir->getProximo());
-        numeroA -= excluir->getGrau();
+        if(direcionado)
+            numeroA -= excluir->getGrauEntrada() + excluir->getGrauSaida();
+        else
+            numeroA -= excluir->getGrau();
         delete excluir;
         numeroV--;
         return;
@@ -271,10 +295,15 @@ void Grafo::removeAresta(unsigned int v1, unsigned int v2){
                 //Se a aresta é a primeira da lista, já exclui
                 if(a->getDestino()->getId() == v2){
                     excluir = i->getPrimeira();
+                    if(direcionado){
+                        v->diminuiGrauSaida();
+                        excluir->getDestino()->diminuiGrauEntrada();
+                    }
+                    else
+                        v->diminuiGrau();
                     i->setPrimeira(excluir->getProxima());
                     delete excluir;
                     numeroA--;
-                    v->diminuiGrau();
                     return;
                 }
                 if(a->getProxima()->getDestino()->getId() == v2){
@@ -286,13 +315,19 @@ void Grafo::removeAresta(unsigned int v1, unsigned int v2){
         }
     }
     //Se a aresta nao foi encontrada, nao faz nada
-        if(excluir == nullptr){
+    if(excluir == nullptr){
         cout << "Aresta não encontrada!" << endl;
         return;
     }
     else{
         anterior->setProxima(excluir->getProxima());
-        v->diminuiGrau();
+        if(direcionado){
+            v->diminuiGrauSaida();
+            excluir->getDestino()->diminuiGrauEntrada();
+        }
+        else{
+            v->diminuiGrau();
+        }
         delete excluir;
         numeroA--;
         return;
@@ -309,23 +344,52 @@ bool Grafo::ehCompleto(){
 
 //Apresenta a sequencia de graus do grafo
 void Grafo::sequenciaGraus(){
-    vector<unsigned int> sequencia;
-    for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
-        sequencia.push_back(i->getGrau());
+    if(direcionado){
+        vector<unsigned int> sequenciaEntrada;
+        vector<unsigned int> sequenciaSaida;
+        for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
+            sequenciaEntrada.push_back(i->getGrauEntrada());
+            sequenciaSaida.push_back(i->getGrauSaida());
+        }
+        stable_sort (sequenciaEntrada.begin(), sequenciaEntrada.end()); //Ordena do menor para o maior
+        stable_sort (sequenciaSaida.begin(), sequenciaSaida.end()); //Ordena do menor para o maior
+        cout << "Sequencia de graus de entrada: ";
+        for (auto it = sequenciaEntrada.rbegin(); it != sequenciaEntrada.rend(); ++it) //Percorre vetor ao contrario
+            cout << "[" << *it << "]";
+        cout << endl << "Sequencia de graus de saida: ";
+        for (auto it = sequenciaSaida.rbegin(); it != sequenciaSaida.rend(); ++it) //Percorre vetor ao contrario
+            cout << "[" << *it << "]";
+        sequenciaEntrada.clear();
+        sequenciaSaida.clear();
     }
-    stable_sort (sequencia.begin(), sequencia.end()); //Ordena do menor para o maior
-    for (auto it = sequencia.rbegin(); it != sequencia.rend(); ++it) //Percorre vetor ao contrario
-        cout << "[" << *it << "]";
-    sequencia.clear();
+    else{
+        vector<unsigned int> sequencia;
+        for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
+            sequencia.push_back(i->getGrau());
+        }
+        stable_sort (sequencia.begin(), sequencia.end()); //Ordena do menor para o maior
+        for (auto it = sequencia.rbegin(); it != sequencia.rend(); ++it) //Percorre vetor ao contrario
+            cout << "[" << *it << "]";
+        sequencia.clear();
+    }
 }
 
 //Verifica se o grafo é K-regular
 bool Grafo::verificaRegularidade(unsigned int k){
-    for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
-        if(i->getGrau() != k)
-            return false;
+    if(direcionado){
+        for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
+            if(i->getGrauEntrada() != k || i->getGrauSaida() != k)
+                return false;
+        }
+        return true;
     }
-    return true;
+    else{
+        for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
+            if(i->getGrau() != k)
+                return false;
+        }
+        return true;
+    }
 }
 
 //Verifica o grau de um vertice
@@ -333,6 +397,22 @@ unsigned int Grafo::verificaGrau(unsigned int g){
     for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
         if(i->getId() == g)
             return i->getGrau();
+    }
+}
+
+//Verifica o grau de entrada de um vertice
+unsigned int Grafo::verificaGrauEntrada(unsigned int g){
+    for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
+        if(i->getId() == g)
+            return i->getGrauEntrada();
+    }
+}
+
+//Verifica o grau de saida um vertice
+unsigned int Grafo::verificaGrauSaida(unsigned int g){
+    for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
+        if(i->getId() == g)
+            return i->getGrauSaida();
     }
 }
 

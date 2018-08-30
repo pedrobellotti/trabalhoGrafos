@@ -4,6 +4,9 @@ Vertice::Vertice(unsigned int a){
     id = a;
     proximo = nullptr;
     primeiraAresta = nullptr;
+    grau = 0;
+    grauEntrada = 0;
+    grauSaida = 0;
 }
 
 Vertice::~Vertice(){
@@ -18,8 +21,36 @@ unsigned int Vertice::getGrau(){
     return grau;
 }
 
+unsigned int Vertice::getGrauEntrada(){
+    return grauEntrada;
+}
+
+unsigned int Vertice::getGrauSaida(){
+    return grauSaida;
+}
+
+void Vertice::aumentaGrau(){
+    grau++;
+}
+
 void Vertice::diminuiGrau(){
     grau--;
+}
+
+void Vertice::aumentaGrauEntrada(){
+    grauEntrada++;
+}
+
+void Vertice::diminuiGrauEntrada(){
+    grauEntrada--;
+}
+
+void Vertice::aumentaGrauSaida(){
+    grauSaida++;
+}
+
+void Vertice::diminuiGrauSaida(){
+    grauSaida--;
 }
 
 void Vertice::setId(unsigned int a){
@@ -44,7 +75,6 @@ void Vertice::adicionaArestaAux(Aresta* nova){
         for(a; a->getProxima() != nullptr; a=a->getProxima());
         a->setProxima(nova);
     }
-    grau++;
 }
 
 //Remove todas as arestas do vertice
@@ -58,6 +88,8 @@ void Vertice::removeTodasArestas(){
     }
     primeiraAresta = nullptr;
     grau = 0;
+    grauEntrada = 0;
+    grauSaida = 0;
 }
 
 Aresta* Vertice::getPrimeira(){

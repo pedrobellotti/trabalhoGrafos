@@ -12,7 +12,9 @@ class Grafo;
 class Vertice{
     private:
         unsigned int id; //Id do vertice
-        unsigned int grau; //Grau do vertice
+        unsigned int grau; //Grau do vertice (para grafos nao direcionados)
+        unsigned int grauEntrada; //Grau de entrada (para grafos direcionados)
+        unsigned int grauSaida; //Grau de saida (para grafos direcionados)
         Vertice* proximo; //Ponteiro para o proximo vertice na lista
         Aresta* primeiraAresta; //Ponteiro para a primeira aresta da lista de adjacencia
     public:
@@ -20,7 +22,14 @@ class Vertice{
         ~Vertice();
         unsigned int getId();
         unsigned int getGrau();
+        unsigned int getGrauEntrada();
+        unsigned int getGrauSaida();
+        void aumentaGrau();
         void diminuiGrau();
+        void aumentaGrauEntrada();
+        void diminuiGrauEntrada();
+        void aumentaGrauSaida();
+        void diminuiGrauSaida();
         void setId(unsigned int);
         Vertice* getProximo();
         void setProximo(Vertice*);
@@ -76,6 +85,8 @@ class Grafo{
         void sequenciaGraus();
         bool verificaRegularidade(unsigned int);
         unsigned int verificaGrau(unsigned int);
+        unsigned int verificaGrauEntrada(unsigned int);
+        unsigned int verificaGrauSaida(unsigned int);
         void vizinhancaAberta(unsigned int);
         void vizinhancaFechada(unsigned int);
 };
