@@ -194,7 +194,10 @@ void Grafo::salvaGrafo(string nomeArquivo){
             arquivo<<"}\n";
         }
         arquivo.close();
-        cout << "Grafo salvo, caso o arquivo usado seja .dot, use 'dot -Tpng -O <nome_arquivo.dot>' para gerar a imagem do grafo." << endl;
+        cout << endl;
+        cout << "Grafo salvo, caso o arquivo de saida tenha extensão .dot é possivel gerar a imagem do grafo usando GraphViz:" << endl;
+        cout << "Para grafos pequenos, use 'dot -Tpng -O <nome_arquivo.dot>'." << endl;
+        cout << "Caso o grafo seja muito grande, use 'sfdp -x -Goverlap=scale -Tpng <nome_arquivo.dot> > saida.png'." << endl;
     }
 }
 
