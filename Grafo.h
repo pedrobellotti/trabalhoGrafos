@@ -4,6 +4,8 @@
 #include <vector>
 #include <algorithm>
 #include <fstream>
+#include <string>
+
 using namespace std;
 class Vertice;
 class Aresta;
@@ -44,6 +46,7 @@ class Aresta{
         int peso; //Peso da aresta
         Vertice* destino; //Ponteiro para o vertice de destino
         Aresta* proxima; //Ponteiro para a proxima aresta na lista
+        bool equivalente; //Guarda se a aresta é a aresta equivalente (para grafos nao direcionados)
     public:
         Aresta();
         ~Aresta();
@@ -53,6 +56,8 @@ class Aresta{
         void setDestino(Vertice*);
         Aresta* getProxima();
         void setProxima(Aresta*);
+        void setEquivalente(bool);
+        bool getEquivalente();
 };
 
 class Grafo{
@@ -76,7 +81,7 @@ class Grafo{
         void adicionaAresta(unsigned int, unsigned int, int);
         void alteraPeso(unsigned int, unsigned int, int);
         void imprimeGrafo();
-        void salvaGrafo(ofstream&);
+        void salvaGrafo(string);
         bool verificaAdjacencia(unsigned int, unsigned int);
         bool verificaId(unsigned int);
         void removeVertice(unsigned int);

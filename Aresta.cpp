@@ -4,6 +4,7 @@ Aresta::Aresta(){
     peso = 0;
     destino = nullptr;
     proxima = nullptr;
+    equivalente = false;
 }
 
 Aresta::~Aresta(){
@@ -33,4 +34,12 @@ Aresta* Aresta::getProxima(){
 
 void Aresta::setProxima(Aresta* a){
     proxima = a;
+}
+
+void Aresta::setEquivalente(bool e){
+    equivalente = e;
+}
+
+bool Aresta::getEquivalente(){
+    return equivalente;
 }

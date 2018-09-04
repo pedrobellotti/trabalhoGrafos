@@ -99,6 +99,7 @@ void Grafo::adicionaAresta(unsigned int idorigem, unsigned int iddestino, int pe
             dest->adicionaArestaAux(equivalente);
             ori->aumentaGrau();
             dest->aumentaGrau();
+            equivalente->setEquivalente(true); //Nova nao precisa de setequivalente porque o padrao já é false
             numeroA++;
         }
     }
@@ -149,34 +150,51 @@ void Grafo::imprimeGrafo(){
 }
 
 //Salva o grafo no arquivo txt
-void Grafo::salvaGrafo(ofstream& arquivo){
+void Grafo::salvaGrafo(string nomeArquivo){
     unsigned short salva;
     do{
-        cout << "Deseja salvar o grafo no arquivo de saida? Digite 1 para salvar e 0 para não salvar: ";
+        cout << "Deseja salvar o grafo neste estado no arquivo de saida? Isso irá sobrescrever o arquivo atual." << endl;
+        cout << "Digite 1 para salvar e 0 para não salvar: ";
         cin >> salva;
     }while(salva != 0 && salva != 1);
     if(salva == 0) //Se o usuario nao quer salvar, sai da funcao
         return;
     else{
+        ofstream arquivo;
+        arquivo.open(nomeArquivo);
+        string tipoAresta; //Representacao das arestas no arquivo de saida
+        string tipoGrafo; //Representacao do tipo do grafo no arquivo de saida
+        if(direcionado){
+            tipoGrafo = "digraph {\n";
+            tipoAresta = " -> ";
+        }
+        else{
+            tipoGrafo = "graph {\n";
+            tipoAresta = " -- ";
+        }
         if (ponderado){ //se for ponderado, salva com os pesos
-            arquivo<<"\n";
+            arquivo<<tipoGrafo;
             for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
-                arquivo << "Vertice " << i->getId() << "-> ";
-                for (Aresta* a = i->getPrimeira() ; a != nullptr ; a=a->getProxima())
-                    arquivo << "(" << a->getPeso() << ")" << a->getDestino()->getId() << " | ";
-                arquivo<<"\n";
+                for (Aresta* a = i->getPrimeira() ; a != nullptr ; a=a->getProxima()){
+                    if(!a->getEquivalente()) //Nao salva a aresta equivalente (aresta 1-2 é a mesma de 2-1)
+                        arquivo << i->getId() << tipoAresta << a->getDestino()->getId() << "[label=" << a->getPeso() << "]" << ";\n";
+                }
             }
+            arquivo<<"}\n";
         }
         else
         {
-            arquivo<<"\n";
+            arquivo<<tipoGrafo;
             for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
-                arquivo << "Vertice " << i->getId() << "-> ";
-                for (Aresta* a = i->getPrimeira() ; a != nullptr ; a=a->getProxima())
-                    arquivo << a->getDestino()->getId() << " | ";
-                arquivo<<"\n";
+                for (Aresta* a = i->getPrimeira() ; a != nullptr ; a=a->getProxima()){
+                    if(!a->getEquivalente()) //Nao salva a aresta equivalente (aresta 1-2 é a mesma de 2-1)
+                        arquivo << i->getId() << tipoAresta << a->getDestino()->getId() << ";\n";
+                }
             }
+            arquivo<<"}\n";
         }
+        arquivo.close();
+        cout << "Grafo salvo, caso o arquivo usado seja .dot, use 'dot -Tpng -O <nome_arquivo.dot>' para gerar a imagem do grafo." << endl;
     }
 }
 

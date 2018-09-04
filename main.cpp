@@ -43,11 +43,7 @@ int main (int argc, char* argv[]){
     //Guardando os nomes dos arquivos
     string nomeEntrada = argv[1];
     string nomeSaida = argv[2];
-    //Criando arquivo de saida
-    ofstream arquivoSaida;
-    arquivoSaida.open(nomeSaida);
-    arquivoSaida << "--Inicio do arquivo de saida--\n";
-    arquivoSaida << "Arquivo de entrada: " + nomeEntrada + "\n";
+    
     Grafo* g = new Grafo();
     unsigned short dir;
     do{
@@ -101,7 +97,7 @@ int main (int argc, char* argv[]){
             }
             case 2: {
                 g->imprimeGrafo();
-                g->salvaGrafo(arquivoSaida);
+                g->salvaGrafo(nomeSaida);
                 break;
             }
             case 3: {
@@ -113,7 +109,7 @@ int main (int argc, char* argv[]){
                 }
                 else
                     g->adicionaVertice(ver);
-                    g->salvaGrafo(arquivoSaida);
+                    g->salvaGrafo(nomeSaida);
                 break;
             }
             case 4: {
@@ -125,7 +121,7 @@ int main (int argc, char* argv[]){
                 }
                 else
                     g->removeVertice(ver);
-                    g->salvaGrafo(arquivoSaida);
+                    g->salvaGrafo(nomeSaida);
                 break;
             }
             case 5: {
@@ -139,7 +135,7 @@ int main (int argc, char* argv[]){
                 }
                 if(g->verificaId(ver1) && g->verificaId(ver2)){
                     g->adicionaAresta(ver1,ver2,peso);
-                    g->salvaGrafo(arquivoSaida);
+                    g->salvaGrafo(nomeSaida);
                 }
                 else
                     cout << "Algum dos vértices informados não existe no grafo!" << endl;
@@ -153,13 +149,13 @@ int main (int argc, char* argv[]){
                 if(g->verificaAdjacencia(ver1,ver2)){
                     if(g->getDirecionado()){
                         g->removeAresta(ver1,ver2);
-                        g->salvaGrafo(arquivoSaida);
+                        g->salvaGrafo(nomeSaida);
                         break;
                     }
                     else{
                         g->removeAresta(ver1,ver2);
                         g->removeAresta(ver2,ver1);
-                        g->salvaGrafo(arquivoSaida);
+                        g->salvaGrafo(nomeSaida);
                         break;
                     }
                 }
@@ -182,13 +178,13 @@ int main (int argc, char* argv[]){
                         cin >> peso;
                         if(g->getDirecionado()){
                             g->alteraPeso(ver1, ver2, peso);
-                            g->salvaGrafo(arquivoSaida);
+                            g->salvaGrafo(nomeSaida);
                             break;
                         }
                         else{ //Se nao for direcionado o peso da equivalente tambem deve ser alterado
                             g->alteraPeso(ver1, ver2, peso);
                             g->alteraPeso(ver2, ver1, peso);
-                            g->salvaGrafo(arquivoSaida);
+                            g->salvaGrafo(nomeSaida);
                             break;
                         }
                     }
@@ -281,8 +277,6 @@ int main (int argc, char* argv[]){
             }
         }
     }while (menu != 0);
-    arquivoSaida << "\n--Fim do arquivo de saida--";
-    arquivoSaida.close();
     delete g;
     return 0;
 }
