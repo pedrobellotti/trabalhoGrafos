@@ -1,3 +1,8 @@
+/*
+* Trabalho DCC 059 - Teoria dos Grafos
+* Grupo 02 - Coloração de vértices
+*/
+
 #ifndef GRAFO_H_INCLUDED
 #define GRAFO_H_INCLUDED
 #include <iostream>
@@ -19,26 +24,32 @@ class Vertice{
         unsigned int grauSaida; //Grau de saida (para grafos direcionados)
         Vertice* proximo; //Ponteiro para o proximo vertice na lista
         Aresta* primeiraAresta; //Ponteiro para a primeira aresta da lista de adjacencia
+        bool visitado; //Marcacao se o vertice foi visitado ou nao (usado para buscas em profundidade)
+        unsigned int cor; //Cor do vertice (usada na coloracao)
     public:
-        Vertice(unsigned int);
-        ~Vertice();
-        unsigned int getId();
-        unsigned int getGrau();
-        unsigned int getGrauEntrada();
-        unsigned int getGrauSaida();
-        void aumentaGrau();
-        void diminuiGrau();
-        void aumentaGrauEntrada();
-        void diminuiGrauEntrada();
-        void aumentaGrauSaida();
-        void diminuiGrauSaida();
-        void setId(unsigned int);
-        Vertice* getProximo();
-        void setProximo(Vertice*);
-        void adicionaArestaAux(Aresta*);
-        void removeTodasArestas();
-        Aresta* getPrimeira();
-        void setPrimeira(Aresta*);
+        Vertice(unsigned int); //Construtor
+        ~Vertice(); //Destrutor
+        unsigned int getId(); //Retorna id do vertice
+        unsigned int getGrau(); //Retorna grau do vertice
+        unsigned int getGrauEntrada(); //Retorna grau de entrada do vertice (para digrafos)
+        unsigned int getGrauSaida(); //Retorna grau de saida do vertice (para digrafos)
+        void aumentaGrau(); //Aumenta o grau do vertice
+        void diminuiGrau(); //Diminui o grau do vertice
+        void aumentaGrauEntrada(); //Aumenta o grau de entrada do vertice (para digrafos)
+        void diminuiGrauEntrada(); //Diminui o grau de entrada do vertice (para digrafos)
+        void aumentaGrauSaida(); //Aumenta o grau de saida do vertice (para digrafos)
+        void diminuiGrauSaida(); //Diminui o grau de saida do vertice (para digrafos)
+        void setId(unsigned int); //Muda a id do vertice
+        Vertice* getProximo(); //Retorna o proximo vertice da lista de vertices
+        void setProximo(Vertice*); //Muda o ponteiro para o proximo vertice
+        void adicionaArestaAux(Aresta*); //Adiciona aresta no vertice
+        void removeTodasArestas(); //Remove todas as arestas do vertice
+        Aresta* getPrimeira(); //Retorna a primeira aresta da lista de arestas deste vertice (lista de adjacencia)
+        void setPrimeira(Aresta*); //Muda a primeira aresta da lista de arestas
+        void setVisitado(bool); //Muda a marcacao de visitado
+        bool getVisitado(); //Retorna a marcacao de visitado
+        void setCor(unsigned int); //Muda a cor do vertice
+        unsigned int getCor(); //Retorna a cor do vertice
 };
 
 class Aresta{
@@ -48,16 +59,16 @@ class Aresta{
         Aresta* proxima; //Ponteiro para a proxima aresta na lista
         bool equivalente; //Guarda se a aresta é a aresta equivalente (para grafos nao direcionados)
     public:
-        Aresta();
-        ~Aresta();
-        int getPeso();
-        void setPeso(int);
-        Vertice* getDestino();
-        void setDestino(Vertice*);
-        Aresta* getProxima();
-        void setProxima(Aresta*);
-        void setEquivalente(bool);
-        bool getEquivalente();
+        Aresta(); //Construtor
+        ~Aresta(); //Destrutor
+        int getPeso(); //Retorna o peso da aresta
+        void setPeso(int); //Muda o peso da aresta
+        Vertice* getDestino(); //Retorna o vertice destino da aresta
+        void setDestino(Vertice*); //Muda o vertice destino da aresta
+        Aresta* getProxima(); //Retorna a proxima aresta da lista de arestas
+        void setProxima(Aresta*); //Muda a proxima aresta da lista
+        void setEquivalente(bool); //Muda a marcacao de equivalente
+        bool getEquivalente(); //Retorna a marcacao de equivalente
 };
 
 class Grafo{
@@ -68,32 +79,32 @@ class Grafo{
         bool direcionado; //Guarda se o grafo é direcionado ou nao
         bool ponderado; //Guarda se o grafo é ponderado ou nao
     public:
-        Grafo();
-        ~Grafo();
-        void alteraPonderado(bool);
-        void alteraDirecionado(bool);
-        bool getPonderado();
-        bool getDirecionado();
-        void exibeInformacoes();
-        unsigned int getNumeroV();
-        Vertice* getPrimeiro();
-        void adicionaVertice(unsigned int);
-        void adicionaAresta(unsigned int, unsigned int, int);
-        void alteraPeso(unsigned int, unsigned int, int);
-        void imprimeGrafo();
-        void salvaGrafo(string);
-        bool verificaAdjacencia(unsigned int, unsigned int);
-        bool verificaId(unsigned int);
-        void removeVertice(unsigned int);
-        void removeAresta(unsigned int, unsigned int);
-        bool ehCompleto();
-        void sequenciaGraus();
-        bool verificaRegularidade(unsigned int);
-        unsigned int verificaGrau(unsigned int);
-        unsigned int verificaGrauEntrada(unsigned int);
-        unsigned int verificaGrauSaida(unsigned int);
-        void vizinhancaAberta(unsigned int);
-        void vizinhancaFechada(unsigned int);
-        bool verificaBipartido();
+        Grafo(); //Construtor
+        ~Grafo(); //Destrutor
+        void alteraPonderado(bool); //Muda a marcacao de ponderado
+        void alteraDirecionado(bool); //Muda a marcacao de direcionado
+        bool getPonderado(); //Retorna a marcacao de ponderado
+        bool getDirecionado(); //Retorna a marcaco de direcionado
+        void exibeInformacoes(); //Mostra as informacoes do grafo na tela
+        unsigned int getNumeroV(); //Retorna o numero de vertices do grafo
+        Vertice* getPrimeiro(); //Retorna o ponteiro para o primeiro vertice da lista de vertices do grafo
+        void adicionaVertice(unsigned int); //Adiciona um vertice no grafo
+        void adicionaAresta(unsigned int, unsigned int, int); //Adiciona uma aresta no grafo
+        void alteraPeso(unsigned int, unsigned int, int); //Altera o peso de uma aresta (para grafos ponderados)
+        void imprimeGrafo(); //Imprime o grafo na tela
+        void salvaGrafo(string); //Salva o grafo no arquivo txt de saida
+        bool verificaAdjacencia(unsigned int, unsigned int); //Verifica adjacencia entre dois vertices
+        bool verificaId(unsigned int); //Verifica se um vertice com a id passada ja existe no grafo
+        void removeVertice(unsigned int); //Remove um vertice do grafo
+        void removeAresta(unsigned int, unsigned int); //Remove uma aresta do grafo
+        bool ehCompleto(); //Verifica se o grafo é completo
+        void sequenciaGraus(); //Imprime a sequencia de graus do grafo
+        bool verificaRegularidade(unsigned int); //Verifica a k-regularidade do grafo
+        unsigned int verificaGrau(unsigned int); //Verifica o grau de um vertice
+        unsigned int verificaGrauEntrada(unsigned int); //Verifica o grau de entrada de um vertice (para digrafos)
+        unsigned int verificaGrauSaida(unsigned int); //Verifica o grau de saida de um vertice (para digrafos)
+        void vizinhancaAberta(unsigned int); //Imprime a vizinhanca aberta de um vertice
+        void vizinhancaFechada(unsigned int); //Imprime a vizinhanca fechada de um vertice
+        bool verificaBipartido(); //Verifica se o grafo é bipartido
 };
 #endif // GRAFO_H_INCLUDED

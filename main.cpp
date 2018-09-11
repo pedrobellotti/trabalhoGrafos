@@ -1,3 +1,8 @@
+/*
+* Trabalho DCC 059 - Teoria dos Grafos
+* Grupo 02 - Coloração de vértices
+*/
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -6,6 +11,10 @@
 
 using namespace std;
 
+/*
+* Cria o grafo a partir do arquivo texto de entrada
+* Parametros: Ponteiro para o grafo (vazio), nome do arquivo de entrada
+*/
 void criaGrafo(Grafo* g1, string nomeArquivo){
     ifstream arquivo(nomeArquivo);
     string linha;
@@ -34,6 +43,10 @@ void criaGrafo(Grafo* g1, string nomeArquivo){
     }
 }
 
+/*
+* Realiza as funcoes principais do programa
+* Parametros: Nome do arquivo de entrada, arquivo de saida
+*/
 int main (int argc, char* argv[]){
     //Confere se o numero de parametros está correto
     if(argc != 3){
@@ -277,6 +290,6 @@ int main (int argc, char* argv[]){
             }
         }
     }while (menu != 0);
-    delete g;
+    delete g; //Deleta o grafo
     return 0;
 }

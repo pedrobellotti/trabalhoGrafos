@@ -1,5 +1,14 @@
+/*
+* Trabalho DCC 059 - Teoria dos Grafos
+* Grupo 02 - Coloração de vértices
+*/
+
 #include "Grafo.h"
 
+/*
+* Construtor
+* Parametros: -
+*/
 Grafo::Grafo(){
     primeiroVertice = nullptr;
     numeroV = 0;
@@ -8,6 +17,10 @@ Grafo::Grafo(){
     ponderado = false;
 }
 
+/*
+* Destrutor
+* Parametros: -
+*/
 Grafo::~Grafo(){
     Vertice* aux = primeiroVertice;
     Vertice* prox = nullptr;
@@ -21,22 +34,42 @@ Grafo::~Grafo(){
     primeiroVertice = nullptr;
 }
 
+/*
+* Muda a marcacao de ponderado
+* Parametros: Nova marcacao
+*/
 void Grafo::alteraPonderado(bool p){
     ponderado = p;
 }
 
+/*
+* Muda a marcacao de direcionado
+* Parametros: Nova marcacao
+*/
 void Grafo::alteraDirecionado(bool d){
     direcionado = d;
 }
 
+/*
+* Retorna a marcacao de ponderado
+* Parametros: -
+*/
 bool Grafo::getPonderado(){
     return (ponderado ? true : false);
 }
 
+/*
+* Retorna a marcacao de direcionado
+* Parametros: -
+*/
 bool Grafo::getDirecionado(){
     return (direcionado ? true : false);
 }
 
+/*
+* Mostra as informacoes do grafo na tela
+* Parametros: -
+*/
 void Grafo::exibeInformacoes(){
     cout << "Número de vértices: " << numeroV << endl;
     cout << "Número de arestas: " << numeroA << endl;
@@ -44,15 +77,26 @@ void Grafo::exibeInformacoes(){
     cout << "Grafo ponderado: " << (ponderado ? "Sim" : "Não") << endl;
 }
 
+/*
+* Retorna o numero de vertices do grafo
+* Parametros: -
+*/
 unsigned int Grafo::getNumeroV(){
     return numeroV;
 }
 
+/*
+* Retorna o ponteiro para o primeiro vertice da lista de vertices do grafo
+* Parametros: -
+*/
 Vertice* Grafo::getPrimeiro(){
     return primeiroVertice;
 }
 
-//Adiciona um vertice ao grafo
+/*
+* Adiciona um vertice ao grafo
+* Parametros: ID do novo vertice que será adicionado
+*/
 void Grafo::adicionaVertice(unsigned int idnovo){
     Vertice* novo = new Vertice(idnovo);
     Vertice* v = primeiroVertice;
@@ -66,7 +110,10 @@ void Grafo::adicionaVertice(unsigned int idnovo){
     numeroV++;
 }
 
-//Adiciona uma aresta ao grafo
+/*
+* Adiciona uma aresta ao grafo
+* Parametros: IDs dos vertices que formam a aresta, peso da aresta
+*/
 void Grafo::adicionaAresta(unsigned int idorigem, unsigned int iddestino, int peso){
     Vertice* ori = nullptr;
     Vertice* dest = nullptr;
@@ -107,7 +154,10 @@ void Grafo::adicionaAresta(unsigned int idorigem, unsigned int iddestino, int pe
         cout<<"Erro ao adicionar aresta: algum dos vértices não existe no grafo!"<<endl;
 }
 
-//Altera o peso de uma aresta
+/*
+* Altera o peso de uma aresta
+* Parametros: IDs dos vertices que formam a aresta, novo peso da aresta
+*/
 void Grafo::alteraPeso(unsigned int v1, unsigned int v2, int p){
     Vertice* i = primeiroVertice;
     for (i ; i != nullptr ; i=i->getProximo()){
@@ -123,11 +173,9 @@ void Grafo::alteraPeso(unsigned int v1, unsigned int v2, int p){
     }
 }
 
-//Imprime a lista de adjacencia de cada vertice
 /*
-*   vO - vértice origem / vD - vértice destino / p - peso
-*   O grafo é impresso da segunte forma:
-*   Vertice vO-> (p)vD | (p)vD | (p)vD ...
+* Imprime o grafo na tela
+* Parametros: -
 */
 void Grafo::imprimeGrafo(){
     if (ponderado){ //se for ponderado, imprime com os pesos
@@ -149,7 +197,10 @@ void Grafo::imprimeGrafo(){
     }
 }
 
-//Salva o grafo no arquivo txt
+/*
+* Salva o grafo no arquivo txt de saida
+* Parametros: Nome do arquivo de saida
+*/
 void Grafo::salvaGrafo(string nomeArquivo){
     unsigned short salva;
     do{
@@ -201,7 +252,10 @@ void Grafo::salvaGrafo(string nomeArquivo){
     }
 }
 
-//Verifica adjacencia entre dois vertices do grafo
+/*
+* Verifica adjacencia entre dois vertices do grafo
+* Parametros: IDs dos vertices
+*/
 bool Grafo::verificaAdjacencia(unsigned int v1, unsigned int v2){
     if(direcionado){ //Se for direcionado procura somente por v2 na lista de v1
         for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
@@ -230,7 +284,10 @@ bool Grafo::verificaAdjacencia(unsigned int v1, unsigned int v2){
     }
 }
 
-//Verifica se o vertice existe no grafo ou nao
+/*
+* Verifica se o vertice existe no grafo ou nao
+* Parametros: ID do vertice
+*/
 bool Grafo::verificaId(unsigned int id){
     for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
         if(i->getId() == id)
@@ -239,7 +296,10 @@ bool Grafo::verificaId(unsigned int id){
     return false;
 }
 
-//Remove um vertice e suas arestas do grafo
+/*
+* Remove um vertice e suas arestas do grafo
+* Parametros: ID do vertice
+*/
 void Grafo::removeVertice(unsigned int id){
     Vertice* excluir = nullptr;
     Vertice* anterior = nullptr;
@@ -305,7 +365,10 @@ void Grafo::removeVertice(unsigned int id){
     }
 }
 
-//Remove uma aresta do grafo
+/*
+* Remove uma aresta ao grafo
+* Parametros: IDs dos vertices que formam a aresta
+*/
 void Grafo::removeAresta(unsigned int v1, unsigned int v2){
     Aresta* excluir = nullptr;
     Aresta* anterior = nullptr;
@@ -357,7 +420,10 @@ void Grafo::removeAresta(unsigned int v1, unsigned int v2){
     }
 }
 
-//Verifica se o grafo é completo
+/*
+* Verifica se o grafo é completo
+* Parametros: -
+*/
 bool Grafo::ehCompleto(){
     if(numeroA == (numeroV*(numeroV-1)/2))
         return true;
@@ -365,7 +431,10 @@ bool Grafo::ehCompleto(){
         return false;
 }
 
-//Apresenta a sequencia de graus do grafo
+/*
+* Imprime a sequencia de graus do grafo
+* Parametros: -
+*/
 void Grafo::sequenciaGraus(){
     if(direcionado){
         vector<unsigned int> sequenciaEntrada;
@@ -397,7 +466,10 @@ void Grafo::sequenciaGraus(){
     }
 }
 
-//Verifica se o grafo é K-regular
+/*
+* Verifica se o grafo é K-regular
+* Parametros: Número K
+*/
 bool Grafo::verificaRegularidade(unsigned int k){
     if(direcionado){
         for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
@@ -415,7 +487,10 @@ bool Grafo::verificaRegularidade(unsigned int k){
     }
 }
 
-//Verifica o grau de um vertice
+/*
+* Retorna o grau de um vertice
+* Parametros: ID do vértice
+*/
 unsigned int Grafo::verificaGrau(unsigned int g){
     for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
         if(i->getId() == g)
@@ -423,7 +498,10 @@ unsigned int Grafo::verificaGrau(unsigned int g){
     }
 }
 
-//Verifica o grau de entrada de um vertice
+/*
+* Retorna o grau de entrada de um vertice
+* Parametros: ID do vértice
+*/
 unsigned int Grafo::verificaGrauEntrada(unsigned int g){
     for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
         if(i->getId() == g)
@@ -431,7 +509,10 @@ unsigned int Grafo::verificaGrauEntrada(unsigned int g){
     }
 }
 
-//Verifica o grau de saida um vertice
+/*
+* Retorna o grau de saida de um vertice
+* Parametros: ID do vértice
+*/
 unsigned int Grafo::verificaGrauSaida(unsigned int g){
     for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
         if(i->getId() == g)
@@ -439,7 +520,10 @@ unsigned int Grafo::verificaGrauSaida(unsigned int g){
     }
 }
 
-//Vizinhanca aberta de um vertice
+/*
+* Imprime a vizinhanca aberta de um vertice
+* Parametros: ID do vértice
+*/
 void Grafo::vizinhancaAberta(unsigned int id){
     cout << "Vizinhanca aberta do vertice: ";
     Vertice* i = primeiroVertice;
@@ -451,7 +535,10 @@ void Grafo::vizinhancaAberta(unsigned int id){
         cout << a->getDestino()->getId() << " ";
 }
 
-//Vizinhanca fechada de um vertice
+/*
+* Imprime a vizinhanca fechada de um vertice
+* Parametros: ID do vértice
+*/
 void Grafo::vizinhancaFechada(unsigned int id){
     cout << "Vizinhanca fechada do vertice: ";
     Vertice* i = primeiroVertice;
@@ -464,7 +551,10 @@ void Grafo::vizinhancaFechada(unsigned int id){
         cout << a->getDestino()->getId() << " ";
 }
 
-//Verifica se o grafo é bipartido
+/*
+* Verifica se o grafo é bipartido
+* Parametros: -
+*/
 bool Grafo::verificaBipartido(){
     //Marca todos os vertices como nao visitados (0)
     vector<unsigned short> visitado(numeroV + 1);
