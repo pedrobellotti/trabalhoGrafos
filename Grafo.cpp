@@ -86,14 +86,6 @@ unsigned int Grafo::getNumeroV(){
 }
 
 /*
-* Retorna o ponteiro para o primeiro vertice da lista de vertices do grafo
-* Parametros: -
-*/
-Vertice* Grafo::getPrimeiro(){
-    return primeiroVertice;
-}
-
-/*
 * Adiciona um vertice ao grafo
 * Parametros: ID do novo vertice que será adicionado
 */
@@ -599,4 +591,73 @@ bool Grafo::verificaBipartido(){
     }
     //Se saiu do for anterior significa que todos os vertices tem marca diferente dos adjacentes, entao o grafo é bipartido
     return true;
+}
+
+/*
+* Marca todos os vertices como nao visitados (importante para fazer buscas em sequencia)
+* Parametros: -
+*/
+void Grafo::limpaVisitados(){
+     for (Vertice* v = primeiroVertice; v != nullptr; v=v->getProximo()){
+        v->setVisitado(false);
+    }
+}
+
+/*
+* Busca em profundidade a partir de um vertice (nao percorre todos os vértices se o grafo nao for conexo)
+* Parametros: Vértice inicial
+*/
+void Grafo::buscaProf(Vertice* v){
+    v->setVisitado(true);
+    for (Aresta* a = v->getPrimeira(); a != nullptr; a=a->getProxima()){
+        if(!a->getDestino()->getVisitado())
+            buscaProf(a->getDestino());
+    }
+}
+
+/*
+* Imprime o fecho transitivo direto
+* Parametros: ID do vértice
+*/
+void Grafo::fechoDireto(unsigned int id){
+    Vertice* v = nullptr;
+    //Procura o vertice com a id passada
+    for (v = primeiroVertice; v != nullptr; v=v->getProximo()){
+        if(v->getId() == id)
+            break;
+    }
+    //Marca todos os vertices como nao visitados (caso isso nao seja feito, o resultado da busca ficara errado)
+    limpaVisitados();
+    //Realiza a busca em profundidade usando o vertice como inicio
+    buscaProf(v);
+    //Verifica quais vertices foram visitados e os imprime
+    cout << "Fecho transitivo direto a partir do vertice " << id << ": ";
+    for (v = primeiroVertice; v != nullptr; v=v->getProximo()){
+        if(v->getVisitado())
+            cout << v->getId() << " | ";
+    }
+    cout << endl;
+}
+
+/*
+* Imprime o fecho transitivo indireto
+* Parametros: ID do vértice
+*/
+void Grafo::fechoIndireto(unsigned int id){
+    Vertice* v = nullptr;
+    Vertice* n = nullptr;
+    //Procura o vertice com a id passada
+    for (n = primeiroVertice; n != nullptr; n=n->getProximo()){
+        if(n->getId() == id)
+            break;
+    }
+    cout << "Fecho transitivo indireto do vertice " << id << ": ";
+    for (v = primeiroVertice; v != nullptr; v=v->getProximo()){
+        limpaVisitados(); //Marca todos os vertices como nao visitados
+        buscaProf(v); //Faz a busca em profundidade a partir do vertice
+        /*Se na busca em profundidade a partir do vertice v o vertice com a id passada foi atingido,
+        entao o vertice v faz parte do fecho transitivo indireto*/
+        if(n->getVisitado())
+            cout << v->getId() << " | ";
+    }
 }

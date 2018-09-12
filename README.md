@@ -26,10 +26,10 @@ informado pelo usuário;
 
 - [x] apresentar a sequência de graus;
 
-- [ ] apresentar o fecho transitivo direto (para
+- [x] apresentar o fecho transitivo direto (para
 digrafos);
 
-- [ ] apresentar o fecho transitivo indireto (para
+- [x] apresentar o fecho transitivo indireto (para
 digrafos);
 
 - [ ] apresentar uma ordenação topológica (para

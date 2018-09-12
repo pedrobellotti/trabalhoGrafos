@@ -78,6 +78,8 @@ class Grafo{
         Vertice* primeiroVertice; //Ponteiro para o primeiro vertice da lista
         bool direcionado; //Guarda se o grafo é direcionado ou nao
         bool ponderado; //Guarda se o grafo é ponderado ou nao
+        void limpaVisitados(); //Marca todos os vertices como nao visitados
+        void buscaProf(Vertice*); //Busca em profundidade
     public:
         Grafo(); //Construtor
         ~Grafo(); //Destrutor
@@ -87,7 +89,6 @@ class Grafo{
         bool getDirecionado(); //Retorna a marcaco de direcionado
         void exibeInformacoes(); //Mostra as informacoes do grafo na tela
         unsigned int getNumeroV(); //Retorna o numero de vertices do grafo
-        Vertice* getPrimeiro(); //Retorna o ponteiro para o primeiro vertice da lista de vertices do grafo
         void adicionaVertice(unsigned int); //Adiciona um vertice no grafo
         void adicionaAresta(unsigned int, unsigned int, int); //Adiciona uma aresta no grafo
         void alteraPeso(unsigned int, unsigned int, int); //Altera o peso de uma aresta (para grafos ponderados)
@@ -106,5 +107,7 @@ class Grafo{
         void vizinhancaAberta(unsigned int); //Imprime a vizinhanca aberta de um vertice
         void vizinhancaFechada(unsigned int); //Imprime a vizinhanca fechada de um vertice
         bool verificaBipartido(); //Verifica se o grafo é bipartido
+        void fechoDireto(unsigned int); //Fecho transitivo direto
+        void fechoIndireto(unsigned int); //Fecho transitivo indireto
 };
 #endif // GRAFO_H_INCLUDED

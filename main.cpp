@@ -75,7 +75,7 @@ int main (int argc, char* argv[]){
     unsigned short menu;
     do{
         cout << endl;
-        cout << "-------------------------Menu-------------------------" << endl;
+        cout << "----------------------------Menu----------------------------" << endl;
         cout << "[0]. Sair." << endl;
         cout << "[1]. Apresentar informacoes do grafo." << endl;
         cout << "[2]. Imprimir o grafo." << endl;
@@ -93,7 +93,9 @@ int main (int argc, char* argv[]){
         cout << "[14]. Apresentar a vizinhança aberta de um vértice." << endl;
         cout << "[15]. Apresentar a vizinhança fechada de um vértice." << endl;
         cout << "[16]. Verificar se o grafo é bipartido." << endl;
-        cout << "------------------------------------------------------" << endl;
+        cout << "[17]. Apresentar o fecho transitivo direto de um vértice." << endl;
+        cout << "[18]. Apresentar o fecho transitivo indireto de um vértice." << endl;
+        cout << "------------------------------------------------------------" << endl;
         cout << "Digite a opcão desejada: ";
         cin >> menu;
         switch (menu){
@@ -287,6 +289,39 @@ int main (int argc, char* argv[]){
                     cout << "O grafo é bipartido." << endl;
                 else
                     cout << "O grafo não é bipartido." << endl;
+                break;
+            }
+            case 17:{
+                //Verifica se o grafo é direcionado
+                if(!g->getDirecionado()){
+                    cout << "Essa função só pode ser executada em grafos direcionados!" << endl;
+                    break;    
+                }
+                cout << "Digite a ID do vértice: ";
+                cin >> ver;
+                if(!g->verificaId(ver)){//Sai da funcao caso o vertice nao exista
+                    cout << "Vértice não existe no grafo!" << endl;
+                    break;
+                }
+                else
+                    g->fechoDireto(ver);
+                break;
+            }
+            case 18:{
+                //Verifica se o grafo é direcionado
+                if(!g->getDirecionado()){
+                    cout << "Essa função só pode ser executada em grafos direcionados!" << endl;
+                    break;    
+                }
+                cout << "Digite a ID do vértice: ";
+                cin >> ver;
+                if(!g->verificaId(ver)){//Sai da funcao caso o vertice nao exista
+                    cout << "Vértice não existe no grafo!" << endl;
+                    break;
+                }
+                else
+                    g->fechoIndireto(ver);
+                break;
             }
         }
     }while (menu != 0);
