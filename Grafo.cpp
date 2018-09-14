@@ -661,3 +661,38 @@ void Grafo::fechoIndireto(unsigned int id){
             cout << v->getId() << " | ";
     }
 }
+
+/*
+* Auxiliar para ordenacao topologica - similar a busca em profundidade, a unica diferenca sendo que
+* os vertices só sao adicionados na pilha após todos seus vizinhos terem sido visitados
+* Parametros: Endereço para a pilha (criada na funcao principal), ponteiro para o vertice inicial
+*/
+void Grafo::ordenacaoTopologicaAux(stack<unsigned int> &pilha, Vertice* ver){
+    ver->setVisitado(true);
+    for (Aresta* a = ver->getPrimeira(); a != nullptr; a=a->getProxima()){
+        if(!a->getDestino()->getVisitado())
+            ordenacaoTopologicaAux(pilha, a->getDestino());
+    }
+    pilha.push(ver->getId()); //Coloca o vertice na pilha apos seus adjacentes terem sido visitados
+}
+
+/*
+* Ordenacao topologica do grafo
+* Parametros: -
+*/
+void Grafo::ordenacaoTopologica(){
+    stack<unsigned int> pilha; //Cria a pilha para usar na funcao auxiliar
+    limpaVisitados(); //Marca todos os vertices como nao visitados
+    for (Vertice*v = primeiroVertice; v!=nullptr; v=v->getProximo()){
+        if(!v->getVisitado())
+            ordenacaoTopologicaAux(pilha, v); //Chama a funcao auxiliar para todos os vertices do grafo
+    }
+
+    cout << "Ordenação topológica do grafo: ";
+    //Imprime a pilha em ordem (imprime o primeiro elemento e depois o remove da pilha)
+    while(!pilha.empty()){
+        cout << pilha.top() << " | ";
+        pilha.pop();
+    }
+    cout<<endl;
+}

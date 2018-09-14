@@ -95,6 +95,7 @@ int main (int argc, char* argv[]){
         cout << "[16]. Verificar se o grafo é bipartido." << endl;
         cout << "[17]. Apresentar o fecho transitivo direto de um vértice." << endl;
         cout << "[18]. Apresentar o fecho transitivo indireto de um vértice." << endl;
+        cout << "[19]. Apresentar a ordenação topológica do grafo." << endl;
         cout << "------------------------------------------------------------" << endl;
         cout << "Digite a opcão desejada: ";
         cin >> menu;
@@ -321,6 +322,15 @@ int main (int argc, char* argv[]){
                 }
                 else
                     g->fechoIndireto(ver);
+                break;
+            }
+            case 19:{
+                //Verifica se o grafo é direcionado
+                if(!g->getDirecionado()){
+                    cout << "Essa função só pode ser executada em grafos direcionados!" << endl;
+                    break;    
+                }
+                g->ordenacaoTopologica();
                 break;
             }
         }

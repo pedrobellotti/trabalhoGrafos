@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <fstream>
 #include <string>
+#include <stack>
 
 using namespace std;
 class Vertice;
@@ -80,6 +81,7 @@ class Grafo{
         bool ponderado; //Guarda se o grafo é ponderado ou nao
         void limpaVisitados(); //Marca todos os vertices como nao visitados
         void buscaProf(Vertice*); //Busca em profundidade
+        void ordenacaoTopologicaAux(stack<unsigned int>&, Vertice*); //Auxiliar para ordenacao topologica
     public:
         Grafo(); //Construtor
         ~Grafo(); //Destrutor
@@ -109,5 +111,6 @@ class Grafo{
         bool verificaBipartido(); //Verifica se o grafo é bipartido
         void fechoDireto(unsigned int); //Fecho transitivo direto
         void fechoIndireto(unsigned int); //Fecho transitivo indireto
+        void ordenacaoTopologica();//Imprime ordenacao topologica do grafo
 };
 #endif // GRAFO_H_INCLUDED

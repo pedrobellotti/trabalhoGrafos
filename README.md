@@ -32,7 +32,7 @@ digrafos);
 - [x] apresentar o fecho transitivo indireto (para
 digrafos);
 
-- [ ] apresentar uma ordenação topológica (para
+- [x] apresentar uma ordenação topológica (para
 digrafos);
 
 - [ ] apresentar uma árvore geradora mínima usando
