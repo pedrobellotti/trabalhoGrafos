@@ -1,6 +1,11 @@
 /*
+*
 * Trabalho DCC 059 - Teoria dos Grafos
 * Grupo 02 - Coloração de vértices
+* 
+* Para compilar o programa, usar g++ versão 7.3.0 (g++ *.cpp -o nomePrograma)
+* Para usar outras versões, usar -std=c++11 na hora de compilar! (g++ -std=c++11 *.cpp -o nomePrograma)
+* 
 */
 
 #include "Grafo.h"

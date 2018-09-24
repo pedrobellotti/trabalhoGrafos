@@ -1,6 +1,11 @@
 /*
+*
 * Trabalho DCC 059 - Teoria dos Grafos
 * Grupo 02 - Coloração de vértices
+* 
+* Para compilar o programa, usar g++ versão 7.3.0 (g++ *.cpp -o nomePrograma)
+* Para usar outras versões, usar -std=c++11 na hora de compilar! (g++ -std=c++11 *.cpp -o nomePrograma)
+* 
 */
 
 #ifndef GRAFO_H_INCLUDED
@@ -82,6 +87,7 @@ class Grafo{
         void limpaVisitados(); //Marca todos os vertices como nao visitados
         void buscaProf(Vertice*); //Busca em profundidade
         void ordenacaoTopologicaAux(stack<unsigned int>&, Vertice*); //Auxiliar para ordenacao topologica
+        void descolore(); //Descolore o grafo (muda a cor de todos os vertices para 0)
     public:
         Grafo(); //Construtor
         ~Grafo(); //Destrutor
@@ -112,5 +118,11 @@ class Grafo{
         void fechoDireto(unsigned int); //Fecho transitivo direto
         void fechoIndireto(unsigned int); //Fecho transitivo indireto
         void ordenacaoTopologica();//Imprime ordenacao topologica do grafo
+        void agmKruskal(); //Imprime a arvore geradora minima com algoritmo de Kruskal
+        void agmPrim(); //Imprime a arvore geradora minima com o algoritmo de Prim
+        void caminhoDijkstra(unsigned int, unsigned int); //Caminho minimo usando algoritmo de Dijkstra
+        void caminhoFloyd(unsigned int, unsigned int); //Caminho minimo usando algoritmo de Floyd
+        void coloreGuloso(); //Algoritmo de coloracao de vertices guloso
+        void coloreGulosoAleatorio(); //Algoritmo de coloracao de vertices guloso aleatorio
 };
 #endif // GRAFO_H_INCLUDED

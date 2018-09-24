@@ -1,6 +1,11 @@
 /*
+*
 * Trabalho DCC 059 - Teoria dos Grafos
 * Grupo 02 - Coloração de vértices
+* 
+* Para compilar o programa, usar g++ versão 7.3.0 (g++ *.cpp -o nomePrograma)
+* Para usar outras versões, usar -std=c++11 na hora de compilar! (g++ -std=c++11 *.cpp -o nomePrograma)
+* 
 */
 
 #include <iostream>
@@ -75,7 +80,7 @@ int main (int argc, char* argv[]){
     unsigned short menu;
     do{
         cout << endl;
-        cout << "----------------------------Menu----------------------------" << endl;
+        cout << "--------------------------------------Menu--------------------------------------" << endl;
         cout << "[0]. Sair." << endl;
         cout << "[1]. Apresentar informacoes do grafo." << endl;
         cout << "[2]. Imprimir o grafo." << endl;
@@ -96,7 +101,13 @@ int main (int argc, char* argv[]){
         cout << "[17]. Apresentar o fecho transitivo direto de um vértice." << endl;
         cout << "[18]. Apresentar o fecho transitivo indireto de um vértice." << endl;
         cout << "[19]. Apresentar a ordenação topológica do grafo." << endl;
-        cout << "------------------------------------------------------------" << endl;
+        cout << "[20]. Apresentar uma árvore geradora mínima usando algoritmo de Kruskal." << endl;
+        cout << "[21]. Apresentar uma árvore geradora mínima usando algoritmo de Prim." << endl;
+        cout << "[22]. Apresentar o custo do caminho mínimo entre dois vértices com algoritmo de Dijkstra." << endl;
+        cout << "[23]. Apresentar o custo do caminho mínimo entre dois vértices com algoritmo de Floyd." << endl;
+        cout << "[24]. Fazer a coloração dos vértices do grafo usando algoritmo guloso." << endl;
+        cout << "[25]. Fazer a coloração dos vértices do grafo usando algoritmo guloso aleatório." << endl;
+        cout << "--------------------------------------------------------------------------------" << endl;
         cout << "Digite a opcão desejada: ";
         cin >> menu;
         switch (menu){
@@ -333,7 +344,50 @@ int main (int argc, char* argv[]){
                 g->ordenacaoTopologica();
                 break;
             }
+            case 20:{
+                g->agmKruskal();
+                break;
+            }
+            case 21:{
+                g->agmPrim();
+                break;
+            }
+            case 22:{
+                cout << "Digite a ID do vértice origem: ";
+                cin >> ver1;
+                cout << "Digite a ID do vértice destino: ";
+                cin >> ver2;
+                if(g->verificaId(ver1) && g->verificaId(ver2)){
+                    g->caminhoDijkstra(ver1,ver2);
+                }
+                else
+                    cout << "Algum dos vértices informados não existe no grafo!" << endl;
+                break;
+            }
+            case 23:{
+                cout << "Digite a ID do vértice origem: ";
+                cin >> ver1;
+                cout << "Digite a ID do vértice destino: ";
+                cin >> ver2;
+                if(g->verificaId(ver1) && g->verificaId(ver2)){
+                    g->caminhoFloyd(ver1,ver2);
+                }
+                else
+                    cout << "Algum dos vértices informados não existe no grafo!" << endl;
+                break;
+            }
+            case 24:{
+                g->coloreGuloso();
+                break;
+            }
+            case 25:{
+                g->coloreGulosoAleatorio();
+                break;
+            }
         }
+        cout << endl << "--> Pressione ENTER para continuar <--" << endl;
+        cin.ignore();
+        cin.get();
     }while (menu != 0);
     delete g; //Deleta o grafo
     return 0;

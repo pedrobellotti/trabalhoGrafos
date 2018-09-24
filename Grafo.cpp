@@ -1,6 +1,11 @@
 /*
+*
 * Trabalho DCC 059 - Teoria dos Grafos
 * Grupo 02 - Coloração de vértices
+* 
+* Para compilar o programa, usar g++ versão 7.3.0 (g++ *.cpp -o nomePrograma)
+* Para usar outras versões, usar -std=c++11 na hora de compilar! (g++ -std=c++11 *.cpp -o nomePrograma)
+* 
 */
 
 #include "Grafo.h"
@@ -695,4 +700,70 @@ void Grafo::ordenacaoTopologica(){
         pilha.pop();
     }
     cout<<endl;
+}
+
+/*
+* Imprime a arvore geradora minima do grafo usando algoritmo de Kruskal
+* Parametros: -
+*/
+void Grafo::agmKruskal(){
+    //Ainda nao feito
+    return;
+}
+
+/*
+* Imprime a arvore geradora minima do grafo usando algoritmo de Prim
+* Parametros: -
+*/
+void Grafo::agmPrim(){
+    //Ainda nao feito
+    return;
+}
+
+/*
+* Caminho minimo entre dois vertices usando algoritmo de Dijkstra
+* Parametros: IDs dos dois vertices
+*/
+void Grafo::caminhoDijkstra(unsigned int origem, unsigned int destino){
+    //Ainda nao feito
+    return;
+}
+
+/*
+* Caminho minimo entre dois vertices usando algoritmo de Floyd
+* Parametros: IDs dos dois vertices
+*/
+void Grafo::caminhoFloyd(unsigned int origem, unsigned int destino){
+    //Ainda nao feito
+    return;
+}
+
+/* ---------- ALGORITMOS DE COLORAÇÃO DOS VÉRTICES DO GRAFO ---------- */
+
+/*
+* Descolore o grafo (muda a cor de todos os vertices para 0)
+* Parametros: -
+*/
+void Grafo::descolore(){
+    for (Vertice* v = primeiroVertice; v != nullptr; v=v->getProximo()){
+        v->setCor(0);
+    }
+}
+
+/*
+* Faz a coloracao dos vertices do grafo usando o algoritmo guloso
+* Parametros: -
+*/
+void Grafo::coloreGuloso(){
+    //Ainda nao feito
+    return;
+}
+
+/*
+* Faz a coloracao dos vertices do grafo usando o algoritmo guloso aleatorio
+* Parametros: -
+*/
+void Grafo::coloreGulosoAleatorio(){
+    //Ainda nao feito
+    return;
 }
