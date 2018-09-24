@@ -751,12 +751,40 @@ void Grafo::descolore(){
 }
 
 /*
+* Comparador para ordenacao da lista de candidatos (nao tem Grafo:: porque nao é uma funçao do grafo, só serve para ordenação)
+* Parametros: IDs dos vertices
+*/
+bool comparador(Vertice* g1, Vertice* g2){
+    if(g1->getGrau() > g2->getGrau())
+        return true;
+    else
+        return false; 
+}
+
+/*
 * Faz a coloracao dos vertices do grafo usando o algoritmo guloso
 * Parametros: -
 */
 void Grafo::coloreGuloso(){
-    //Ainda nao feito
-    return;
+    //Descolore o grafo
+    descolore();
+    //Cria o vetor de candidatos que sera ordenado pelo grau
+    vector<Vertice*> vertices;
+    //Vetor de marcaco de vertices ja coloridos, cores usadas/disponiveis (inicializa todas com false - nao usada)
+    vector<bool> colorido;
+    for (Vertice* v = primeiroVertice; v != nullptr; v=v->getProximo()){
+        vertices.push_back(v);
+        colorido.push_back(false);
+    }
+    //Ordena o vetor pelo grau dos vertices
+    sort(vertices.begin(), vertices.end(), comparador);
+
+    //Faz a coloracao dos vertices
+
+    //Imprime os vertices com suas respectivas cores
+    for (Vertice* u = primeiroVertice; u != nullptr; u=u->getProximo()){
+        cout << "Vertice " << u->getId() << " - Cor: " << u->getCor() << endl;;
+    }
 }
 
 /*

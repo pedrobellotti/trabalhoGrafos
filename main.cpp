@@ -377,11 +377,17 @@ int main (int argc, char* argv[]){
                 break;
             }
             case 24:{
-                g->coloreGuloso();
+                if(!g->getDirecionado())
+                    g->coloreGuloso();
+                else
+                    cout << "Essa função só pode ser executada em grafos não direcionados!" << endl;
                 break;
             }
             case 25:{
-                g->coloreGulosoAleatorio();
+                if(!g->getDirecionado())
+                    g->coloreGulosoAleatorio();
+                else
+                    cout << "Essa função só pode ser executada em grafos não direcionados!" << endl;
                 break;
             }
         }
