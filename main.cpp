@@ -26,6 +26,7 @@ void criaGrafo(Grafo* g1, string nomeArquivo){
     unsigned int numV, a1, a2 = 0;
     int peso = 0;
     if (arquivo.good()){ //Verifica se o arquivo esta aberto
+        cout << "Lendo grafo do arquivo "  << nomeArquivo << " ..." << endl;
         arquivo >> numV; //Le a primeira linha com o numero de vertices
         for (int i = 1; i<=numV; i++){ //Comeca do 1 porque o vertice 0 nao existe nos arquivos txt
             g1->adicionaVertice(i); //Adiciona o numero lido de vertices
@@ -391,9 +392,11 @@ int main (int argc, char* argv[]){
                 break;
             }
         }
-        cout << endl << "--> Pressione ENTER para continuar <--" << endl;
-        cin.ignore();
-        cin.get();
+        if(menu != 0){
+            cout << endl << "--> Pressione ENTER para continuar <--" << endl;
+            cin.ignore();
+            cin.get();
+        }
     }while (menu != 0);
     delete g; //Deleta o grafo
     return 0;

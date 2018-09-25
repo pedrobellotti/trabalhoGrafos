@@ -48,3 +48,9 @@ algoritmo de Dijkstra;
 - [ ] apresentar o custo do caminho mínimo entre
 dois vértices informados pelo usuário usando o
 algoritmo de Floyd;
+
+- [x] implementar algoritmo de coloração guloso
+
+- [ ] implementar algoritmo de coloração guloso
+aleatório
+

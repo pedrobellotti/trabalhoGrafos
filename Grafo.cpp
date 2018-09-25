@@ -772,7 +772,9 @@ void Grafo::coloreGuloso(){
     vector<Vertice*> vertices;
     //Vetor de marcaco de vertices ja coloridos, cores usadas/disponiveis (inicializa todas com false - nao usada)
     vector<bool> colorido;
-    for (Vertice* v = primeiroVertice; v != nullptr; v=v->getProximo()){
+    //Preenche os vetores
+    Vertice* v = nullptr;
+    for (v = primeiroVertice; v != nullptr; v=v->getProximo()){
         vertices.push_back(v);
         colorido.push_back(false);
     }
@@ -780,11 +782,43 @@ void Grafo::coloreGuloso(){
     sort(vertices.begin(), vertices.end(), comparador);
 
     //Faz a coloracao dos vertices
+    vertices[0]->setCor(1); //Seta o primeiro vertice como cor 1
+    //Itera pelos outros vertices
+    for (int i = 1; i < vertices.size(); i++){
+        //Marca todas as cores dos adjacentes já coloridos como nao disponiveis
+        Aresta* a = nullptr;
+        for(a = vertices[i]->getPrimeira(); a != nullptr; a=a->getProxima()){
+            if(a->getDestino()->getCor() != 0){
+                colorido[a->getDestino()->getCor()] = true;
+            }
+        }
+        
+        //Procura a primeira cor disponivel, comeca de 1 porque o vertice id 0 nao existe
+        unsigned int cor;
+        for(cor = 1; cor < colorido.size(); cor++){
+            if(colorido[cor] == false){
+                //Seta a cor encontrada para o vertice da iteracao atual e sai do for
+                vertices[i]->setCor(cor);
+                break;
+            }
+        }        
 
-    //Imprime os vertices com suas respectivas cores
-    for (Vertice* u = primeiroVertice; u != nullptr; u=u->getProximo()){
-        cout << "Vertice " << u->getId() << " - Cor: " << u->getCor() << endl;;
+        //Reseta a marcacao de vertices coloridos para a proxima iteracao
+        for(a = vertices[i]->getPrimeira(); a != nullptr; a=a->getProxima()){
+            if(a->getDestino()->getCor() != 0){
+                colorido[a->getDestino()->getCor()] = false;
+            }
+        }
     }
+
+    //Imprime os vertices com suas respectivas cores e o total de cores usadas
+    unsigned int totalCores = 0;
+    for (v = primeiroVertice; v != nullptr; v=v->getProximo()){
+        cout << "Vertice " << v->getId() << " - Cor: " << v->getCor() << endl;
+        if(v->getCor() > totalCores)
+            totalCores = v->getCor();
+    }
+    cout << endl << "Total de cores usadas: " << totalCores << endl;
 }
 
 /*
@@ -792,6 +826,8 @@ void Grafo::coloreGuloso(){
 * Parametros: -
 */
 void Grafo::coloreGulosoAleatorio(){
+    //Descolore o grafo
+    descolore();
     //Ainda nao feito
     return;
 }
