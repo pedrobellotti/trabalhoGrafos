@@ -741,6 +741,11 @@ void Grafo::caminhoFloyd(unsigned int origem, unsigned int destino){
 /* ---------- ALGORITMOS DE COLORAÇÃO DOS VÉRTICES DO GRAFO ---------- */
 
 /*
+* Algumas instancias para testes: https://cse.unl.edu/~tnguyen/npbenchmarks/graphcoloring.html 
+* Remover o "e" antes das arestas (o find and replace faz isso rapido)
+*/
+
+/*
 * Descolore o grafo (muda a cor de todos os vertices para 0)
 * Parametros: -
 */
@@ -762,10 +767,20 @@ bool comparador(Vertice* g1, Vertice* g2){
 }
 
 /*
+* Imprime as cores de todos os vértices do grafo
+* Parametros: -
+*/
+void Grafo::imprimeCores(){
+    for (Vertice* v = primeiroVertice; v != nullptr; v=v->getProximo()){
+        cout << "Vertice " << v->getId() << " - Cor: " << v->getCor() << endl;
+    }
+}
+
+/*
 * Faz a coloracao dos vertices do grafo usando o algoritmo guloso
 * Parametros: -
 */
-void Grafo::coloreGuloso(){
+unsigned int Grafo::coloreGuloso(){
     //Descolore o grafo
     descolore();
     //Cria o vetor de candidatos que sera ordenado pelo grau
@@ -811,23 +826,79 @@ void Grafo::coloreGuloso(){
         }
     }
 
-    //Imprime os vertices com suas respectivas cores e o total de cores usadas
+    //Calcula o total de cores usadas
     unsigned int totalCores = 0;
     for (v = primeiroVertice; v != nullptr; v=v->getProximo()){
-        cout << "Vertice " << v->getId() << " - Cor: " << v->getCor() << endl;
         if(v->getCor() > totalCores)
             totalCores = v->getCor();
     }
-    cout << endl << "Total de cores usadas: " << totalCores << endl;
+    return totalCores;
 }
 
 /*
 * Faz a coloracao dos vertices do grafo usando o algoritmo guloso aleatorio
-* Parametros: -
+* Parametros: Seed (semente) para gerar o numero aleatorio e porcentagem dos valores que serao escolhidos
 */
-void Grafo::coloreGulosoAleatorio(){
+unsigned int Grafo::coloreGulosoAleatorio(int seed, float alfa){
     //Descolore o grafo
     descolore();
-    //Ainda nao feito
-    return;
+    //Cria o vetor de candidatos que sera ordenado pelo grau
+    vector<Vertice*> vertices;
+    //Vetor de marcaco de vertices ja coloridos, cores usadas/disponiveis (inicializa todas com false - nao usada)
+    vector<bool> colorido;
+    //Preenche os vetores
+    Vertice* v = nullptr;
+    for (v = primeiroVertice; v != nullptr; v=v->getProximo()){
+        vertices.push_back(v);
+        colorido.push_back(false);
+    }
+    //Ordena o vetor pelo grau dos vertices
+    sort(vertices.begin(), vertices.end(), comparador);
+    //Seta a seed para o numero aleatorio
+    srand(seed);
+    int random; //Numero aleatorio
+
+    //Itera pela lista de vertices até não haver nenhum vértice nela
+    while(!vertices.empty()){
+        random = fmod(rand(), (vertices.size()*alfa)); //Gera um numero aleatorio entre 0 e a porcentagem do tamanho do vetor
+
+        //Marca todas as cores dos adjacentes já coloridos como nao disponiveis
+        Aresta* a = nullptr;
+        for(a = vertices[random]->getPrimeira(); a != nullptr; a=a->getProxima()){
+            if(a->getDestino()->getCor() != 0){
+                colorido[a->getDestino()->getCor()] = true;
+            }
+        }
+
+        //Procura a primeira cor disponivel, comeca de 1 porque o vertice id 0 nao existe
+        unsigned int cor;
+        for(cor = 1; cor < colorido.size(); cor++){
+            if(colorido[cor] == false){
+                //Seta a cor encontrada para o vertice da iteracao atual e sai do for
+                vertices[random]->setCor(cor);
+                break;
+            }
+        }
+
+        //Reseta a marcacao de vertices coloridos para a proxima iteracao
+        for(a = vertices[random]->getPrimeira(); a != nullptr; a=a->getProxima()){
+            if(a->getDestino()->getCor() != 0){
+                colorido[a->getDestino()->getCor()] = false;
+            }
+        }
+
+        //Remove o vertice atual da lista de vertices, já que ele foi colorido
+        if(vertices.size() == 1)
+            vertices.erase(vertices.begin());
+        else
+            vertices.erase(vertices.begin() + random);
+    }
+
+    //Calcula o total de cores usadas e imprime a semente e a porcentagem do tamanho do vetor usado
+    unsigned int totalCores = 0;
+    for (v = primeiroVertice; v != nullptr; v=v->getProximo()){
+        if(v->getCor() > totalCores)
+            totalCores = v->getCor();
+    }
+    return totalCores;
 }

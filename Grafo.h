@@ -16,6 +16,7 @@
 #include <fstream>
 #include <string>
 #include <stack>
+#include <math.h>
 
 using namespace std;
 class Vertice;
@@ -122,7 +123,8 @@ class Grafo{
         void agmPrim(); //Imprime a arvore geradora minima com o algoritmo de Prim
         void caminhoDijkstra(unsigned int, unsigned int); //Caminho minimo usando algoritmo de Dijkstra
         void caminhoFloyd(unsigned int, unsigned int); //Caminho minimo usando algoritmo de Floyd
-        void coloreGuloso(); //Algoritmo de coloracao de vertices guloso
-        void coloreGulosoAleatorio(); //Algoritmo de coloracao de vertices guloso aleatorio
+        void imprimeCores();
+        unsigned int coloreGuloso(); //Algoritmo de coloracao de vertices guloso
+        unsigned int coloreGulosoAleatorio(int,float); //Algoritmo de coloracao de vertices guloso aleatorio
 };
 #endif // GRAFO_H_INCLUDED

@@ -106,8 +106,9 @@ int main (int argc, char* argv[]){
         cout << "[21]. Apresentar uma árvore geradora mínima usando algoritmo de Prim." << endl;
         cout << "[22]. Apresentar o custo do caminho mínimo entre dois vértices com algoritmo de Dijkstra." << endl;
         cout << "[23]. Apresentar o custo do caminho mínimo entre dois vértices com algoritmo de Floyd." << endl;
-        cout << "[24]. Fazer a coloração dos vértices do grafo usando algoritmo guloso." << endl;
-        cout << "[25]. Fazer a coloração dos vértices do grafo usando algoritmo guloso aleatório." << endl;
+        cout << "[24]. Imprimir as cores dos vértices do grafo." << endl;
+        cout << "[25]. Fazer a coloração dos vértices do grafo usando algoritmo guloso." << endl;
+        cout << "[26]. Fazer a coloração dos vértices do grafo usando algoritmo guloso aleatório." << endl;
         cout << "--------------------------------------------------------------------------------" << endl;
         cout << "Digite a opcão desejada: ";
         cin >> menu;
@@ -379,14 +380,37 @@ int main (int argc, char* argv[]){
             }
             case 24:{
                 if(!g->getDirecionado())
-                    g->coloreGuloso();
+                    g->imprimeCores();
                 else
                     cout << "Essa função só pode ser executada em grafos não direcionados!" << endl;
                 break;
             }
             case 25:{
                 if(!g->getDirecionado())
-                    g->coloreGulosoAleatorio();
+                    cout << "Total de cores usadas com algoritmo guloso: " << g->coloreGuloso() << endl;
+                else
+                    cout << "Essa função só pode ser executada em grafos não direcionados!" << endl;
+                break;
+            }
+            case 26:{
+                if(!g->getDirecionado()){
+                    //Itera 500 vezes para cada alfa (10%,20%,30%)
+                    unsigned int melhorResultado = g->getNumeroV();
+                    unsigned int resultadoAtual;
+                    float vetAlfas[3] = {0.10, 0.20, 0.30};
+                    for (int alfa = 0; alfa < 3; alfa++){
+                        cout << "Usando alfa = " << vetAlfas[alfa]*100 << "%" << endl;
+                        for(int iteracoes = 0; iteracoes < 500; iteracoes++){
+                            resultadoAtual = g->coloreGulosoAleatorio(iteracoes, vetAlfas[alfa]); //Troca a seed a cada iteracao
+                            if(resultadoAtual < melhorResultado)
+                                melhorResultado = resultadoAtual;
+                        }
+                        // Ao terminar as 500 iteracoes para o alfa atual, imprime o melhor resultado
+                        cout << "Total de cores usadas com algoritmo guloso aleatório: " << melhorResultado << endl;
+                        cout << endl;
+                        melhorResultado = g->getNumeroV(); //Resetando melhor resultado para o proximo alfa
+                    }
+                }
                 else
                     cout << "Essa função só pode ser executada em grafos não direcionados!" << endl;
                 break;
