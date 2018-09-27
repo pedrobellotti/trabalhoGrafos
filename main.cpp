@@ -394,19 +394,22 @@ int main (int argc, char* argv[]){
             }
             case 26:{
                 if(!g->getDirecionado()){
-                    //Itera 500 vezes para cada alfa (10%,20%,30%)
+                    int seed;
+                    cout << "Digite a seed que será usada: ";
+                    cin >> seed;
                     unsigned int melhorResultado = g->getNumeroV();
                     unsigned int resultadoAtual;
                     float vetAlfas[3] = {0.10, 0.20, 0.30};
+                    //Itera 500 vezes para cada alfa (10%,20%,30%)
                     for (int alfa = 0; alfa < 3; alfa++){
                         cout << "Usando alfa = " << vetAlfas[alfa]*100 << "%" << endl;
                         for(int iteracoes = 0; iteracoes < 500; iteracoes++){
-                            resultadoAtual = g->coloreGulosoAleatorio(iteracoes, vetAlfas[alfa]); //Troca a seed a cada iteracao
+                            resultadoAtual = g->coloreGulosoAleatorio(seed, vetAlfas[alfa]);
                             if(resultadoAtual < melhorResultado)
                                 melhorResultado = resultadoAtual;
                         }
                         // Ao terminar as 500 iteracoes para o alfa atual, imprime o melhor resultado
-                        cout << "Total de cores usadas com algoritmo guloso aleatório: " << melhorResultado << endl;
+                        cout << "Total de cores usadas com o alfa atual: " << melhorResultado << endl;
                         cout << endl;
                         melhorResultado = g->getNumeroV(); //Resetando melhor resultado para o proximo alfa
                     }

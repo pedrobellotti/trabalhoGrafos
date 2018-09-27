@@ -254,31 +254,14 @@ void Grafo::salvaGrafo(string nomeArquivo){
 * Parametros: IDs dos vertices
 */
 bool Grafo::verificaAdjacencia(unsigned int v1, unsigned int v2){
-    if(direcionado){ //Se for direcionado procura somente por v2 na lista de v1
-        for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
-            if(i->getId() == v1){
-                for (Aresta* a = i->getPrimeira() ; a != nullptr ; a=a->getProxima())
-                    if(a->getDestino()->getId() == v2)
-                        return true;
-            }
+    for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
+        if(i->getId() == v1){
+            for (Aresta* a = i->getPrimeira() ; a != nullptr ; a=a->getProxima())
+                if(a->getDestino()->getId() == v2)
+                    return true;
         }
-        return false;
     }
-    else{ //Se nao for direcionado procura por v2 na lista de v1 e v1 na lista de v2
-        for (Vertice* i = primeiroVertice ; i != nullptr ; i=i->getProximo()){
-            if(i->getId() == v1){
-                for (Aresta* a = i->getPrimeira() ; a != nullptr ; a=a->getProxima())
-                    if(a->getDestino()->getId() == v2)
-                        return true;
-            }
-            if(i->getId() == v2){
-                for (Aresta* a = i->getPrimeira() ; a != nullptr ; a=a->getProxima())
-                    if(a->getDestino()->getId() == v1)
-                        return true;
-            }
-        }
-        return false;
-    }
+    return false;
 }
 
 /*
@@ -808,7 +791,7 @@ unsigned int Grafo::coloreGuloso(){
             }
         }
         
-        //Procura a primeira cor disponivel, comeca de 1 porque o vertice id 0 nao existe
+        //Procura a primeira cor disponivel, comeca de 1 porque cor = 0 significa nao colorido
         unsigned int cor;
         for(cor = 1; cor < colorido.size(); cor++){
             if(colorido[cor] == false){
@@ -858,10 +841,11 @@ unsigned int Grafo::coloreGulosoAleatorio(int seed, float alfa){
     srand(seed);
     int random; //Numero aleatorio
 
-    //Itera pela lista de vertices até não haver nenhum vértice nela
+    //Itera pela lista de vertices até ficar vazia (todos os vertices coloridos)
     while(!vertices.empty()){
-        random = fmod(rand(), (vertices.size()*alfa)); //Gera um numero aleatorio entre 0 e a porcentagem do tamanho do vetor
-
+        //Gera um numero aleatorio entre 0 e a porcentagem do tamanho do vetor
+        random = fmod(rand(), (vertices.size()*alfa));
+        
         //Marca todas as cores dos adjacentes já coloridos como nao disponiveis
         Aresta* a = nullptr;
         for(a = vertices[random]->getPrimeira(); a != nullptr; a=a->getProxima()){
@@ -870,7 +854,7 @@ unsigned int Grafo::coloreGulosoAleatorio(int seed, float alfa){
             }
         }
 
-        //Procura a primeira cor disponivel, comeca de 1 porque o vertice id 0 nao existe
+        //Procura a primeira cor disponivel, comeca de 1 porque cor = 0 significa nao colorido
         unsigned int cor;
         for(cor = 1; cor < colorido.size(); cor++){
             if(colorido[cor] == false){
@@ -894,7 +878,7 @@ unsigned int Grafo::coloreGulosoAleatorio(int seed, float alfa){
             vertices.erase(vertices.begin() + random);
     }
 
-    //Calcula o total de cores usadas e imprime a semente e a porcentagem do tamanho do vetor usado
+    //Calcula o total de cores usadas
     unsigned int totalCores = 0;
     for (v = primeiroVertice; v != nullptr; v=v->getProximo()){
         if(v->getCor() > totalCores)
