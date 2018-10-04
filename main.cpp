@@ -347,11 +347,17 @@ int main (int argc, char* argv[]){
                 break;
             }
             case 20:{
-                g->agmKruskal();
+                if(g->getPonderado())
+                    g->agmKruskal();
+                else
+                    cout << "Essa função só pode ser executada em grafos ponderados!" << endl;
                 break;
             }
             case 21:{
-                g->agmPrim();
+                if(g->getPonderado())
+                    g->agmPrim();
+                else
+                    cout << "Essa função só pode ser executada em grafos ponderados!" << endl;
                 break;
             }
             case 22:{
