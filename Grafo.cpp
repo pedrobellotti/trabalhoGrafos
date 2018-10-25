@@ -743,7 +743,7 @@ void Grafo::descolore(){
 * Parametros: IDs dos vertices
 */
 bool comparador(Vertice* g1, Vertice* g2){
-    if(g1->getGrau() > g2->getGrau())
+    if(g1->getGrau() < g2->getGrau())
         return true;
     else
         return false; 

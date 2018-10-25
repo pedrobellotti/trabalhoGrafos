@@ -109,6 +109,7 @@ int main (int argc, char* argv[]){
         cout << "[24]. Imprimir as cores dos vértices do grafo." << endl;
         cout << "[25]. Fazer a coloração dos vértices do grafo usando algoritmo guloso." << endl;
         cout << "[26]. Fazer a coloração dos vértices do grafo usando algoritmo guloso aleatório." << endl;
+        cout << "[27]. Fazer a coloração dos vértices do grafo usando algoritmo guloso aleatório reativo." << endl;
         cout << "--------------------------------------------------------------------------------" << endl;
         cout << "Digite a opcão desejada: ";
         cin >> menu;
@@ -418,6 +419,23 @@ int main (int argc, char* argv[]){
                         cout << "Total de cores usadas com o alfa atual: " << melhorResultado << endl;
                         cout << endl;
                         melhorResultado = g->getNumeroV(); //Resetando melhor resultado para o proximo alfa
+                    }
+                }
+                else
+                    cout << "Essa função só pode ser executada em grafos não direcionados!" << endl;
+                break;
+            }
+            case 27:{
+                if(!g->getDirecionado()){
+                    float alfas[10] = {0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50};
+                    float vetProb[10] = {0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10};
+                    //Executando o total de iteracoes
+                    for (int i = 0; i<2000; i++){
+                        //Executando o tamanho do bloco de iteracoes (para cada alfa)
+                        for (int j = 0; j<500; j++){
+                            //chamar o algoritmo aleatorio
+                        }
+                        //ao final de cada bloco analisar os alfas e alterar a probabilidade de ser escolhido
                     }
                 }
                 else
