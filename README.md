@@ -54,3 +54,6 @@ algoritmo de Floyd;
 - [x] implementar algoritmo de coloração guloso
 aleatório
 
+- [x] implementar algoritmo de coloração guloso
+aleatório reativo
+

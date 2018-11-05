@@ -409,7 +409,7 @@ int main (int argc, char* argv[]){
                     float vetAlfas[3] = {0.10, 0.20, 0.30};
                     //Itera 500 vezes para cada alfa (10%,20%,30%)
                     for (int alfa = 0; alfa < 3; alfa++){
-                        cout << "Usando alfa = " << vetAlfas[alfa]*100 << "%" << endl;
+                        cout << "Usando alfa = " << vetAlfas[alfa] << endl;
                         for(int iteracoes = 0; iteracoes < 500; iteracoes++){
                             resultadoAtual = g->coloreGulosoAleatorio(seed, vetAlfas[alfa]);
                             if(resultadoAtual < melhorResultado)
@@ -427,16 +427,78 @@ int main (int argc, char* argv[]){
             }
             case 27:{
                 if(!g->getDirecionado()){
+                    int seedReativo;
+                    cout << "Digite a seed que será usada: ";
+                    cin >> seedReativo;
+
                     float alfas[10] = {0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50};
-                    float vetProb[10] = {0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10};
-                    //Executando o total de iteracoes
-                    for (int i = 0; i<2000; i++){
-                        //Executando o tamanho do bloco de iteracoes (para cada alfa)
-                        for (int j = 0; j<500; j++){
-                            //chamar o algoritmo aleatorio
+                    int somaAlfa[10] = {0};
+                    int numIteracoes[10] = {0};
+                    double media[10] = {0};
+                    double probabilidade[10] = {0};
+                    unsigned int posicao = 0;
+                    int j = 0;
+
+                    //Iterando 2000 vezes
+                    for(int i=0; i<2000; i++){
+                        /*
+                            Bloco de iteracoes
+                            A cada 200 iteracoes, troca o alfa
+                            Faz 500 iteracoes para cada alfa
+                        */
+                        if(i % 200 == 0){
+                            for(int k=0; k<500; k++){
+                                somaAlfa[j] += g->coloreGulosoAleatorio(seedReativo, alfas[j]);
+                                numIteracoes[j]++;
+                            }
+                            //Ao fim de cada bloco, atualiza a media e troca o alfa
+                            media[j] = somaAlfa[j]/numIteracoes[j];
+                            j++;
                         }
-                        //ao final de cada bloco analisar os alfas e alterar a probabilidade de ser escolhido
+
+                        //Calculando a probabilidade dos alfas
+                        double somatorio = 0.0;
+                        for (int j = 0; j < 10; j++) {
+                            somatorio += pow((1 / media[j]), 10);
+                        }
+                        probabilidade[posicao] = (pow((1 / media[posicao]), 10)) / somatorio;
+
+                        if (posicao == 9)
+                            posicao = 0;
+                        else
+                            posicao++;
                     }
+
+                    //Imprimindo informacoes de cada alfa
+                    for (int k = 0; k < 10; k++){
+                        cout << endl;
+                        cout << "Alfa: " << alfas[k] << endl;
+                        cout << "   Probabilidade: " << probabilidade[k] << endl;
+                        cout << "   Media de cores: " << media[k] << endl;
+                        cout << "   Numero de iteracoes: " << numIteracoes[k] << endl;
+                        cout << "   Somatorio: " << somaAlfa[k] << endl;
+                    }
+
+                    //Colorindo o grafo usando o melhor alfa
+                    double prob = 0;      //Probabilidade de escolha do melhor alfa
+                    float melhorAlfa = 0; //Melhor alfa
+                    unsigned int resultadoMelhorAlfa; //Resultado da coloracao usando o alfa
+                    for (int i = 0; i < 10; i++)
+                    {
+                        if (prob < probabilidade[i])
+                        {
+                            prob = probabilidade[i];
+                            melhorAlfa = alfas[i];
+                        }
+                    }
+                    resultadoMelhorAlfa = g->coloreGulosoAleatorio(seedReativo, melhorAlfa);
+
+                    //Imprimindo os resultados
+                    cout << endl;
+                    cout << "Melhor alfa: " << melhorAlfa << endl;
+                    cout << "Probabilidade de escolha: " << prob*100 << "%" << endl;
+                    cout << "Total de cores usadas: " << resultadoMelhorAlfa << endl;
+                    cout << endl;
                 }
                 else
                     cout << "Essa função só pode ser executada em grafos não direcionados!" << endl;
