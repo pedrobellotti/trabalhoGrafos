@@ -13,6 +13,7 @@
 #include <string>
 #include <sstream>
 #include "Grafo.h"
+#include <random>
 
 using namespace std;
 
@@ -435,58 +436,65 @@ int main (int argc, char* argv[]){
                     int somaAlfa[10] = {0};
                     int numIteracoes[10] = {0};
                     double media[10] = {0};
-                    double probabilidade[10] = {0};
-                    unsigned int posicao = 0;
-                    int j = 0;
+                    double probabilidade[10] = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
+                    double somatorio = 0.0;
+                    int posRandom = 0;
+                    double somaProb[10] = {0};
+                    double random = 0;
+                    srand(seedReativo);
+                    int it = 0;
 
                     //Iterando 2000 vezes
                     for(int i=0; i<2000; i++){
-                        /*
-                            Bloco de iteracoes
-                            A cada 200 iteracoes, troca o alfa
-                            Faz 500 iteracoes para cada alfa
-                        */
-                        if(i % 200 == 0){
-                            for(int k=0; k<500; k++){
-                                somaAlfa[j] += g->coloreGulosoAleatorio(seedReativo, alfas[j]);
-                                numIteracoes[j]++;
-                            }
-                            //Ao fim de cada bloco, atualiza a media e troca o alfa
-                            media[j] = somaAlfa[j]/numIteracoes[j];
-                            j++;
+                       //Somando as probabilidades para escolher uma posicao
+                       somaProb[0] = probabilidade[0];
+                        for (it = 1; it < 10; it++)
+                            somaProb[it] = somaProb[it-1] + probabilidade[it];
+                        
+                        //Gerando um numero aleatorio entre 0 e valor maximo da soma
+                        srand(seedReativo + i);
+                        random = fmod(rand(),somaProb[9]);
+                        //Escolhendo um alfa baseado na probabilidade
+                        for (it = 0; it < 10; it++){
+                            if(random < somaProb[it])
+                                break;
                         }
+                        posRandom = it;
 
-                        //Calculando a probabilidade dos alfas
-                        double somatorio = 0.0;
-                        for (int j = 0; j < 10; j++) {
-                            somatorio += pow((1 / media[j]), 10);
-                        }
-                        probabilidade[posicao] = (pow((1 / media[posicao]), 10)) / somatorio;
+                        //Constroi a solucao com o alfa escolhido
+                        somaAlfa[posRandom] += g->coloreGulosoAleatorio(seedReativo, alfas[posRandom]);
+                        numIteracoes[posRandom]++;
+                        media[posRandom] = somaAlfa[posRandom]/numIteracoes[posRandom];
 
-                        if (posicao == 9)
-                            posicao = 0;
-                        else
-                            posicao++;
+                        //Atualizando a probabilidade de escolha do alfa escolhido
+                        somatorio += pow((1 / media[posRandom]), 10);
+                        probabilidade[posRandom] = (pow((1 / media[posRandom]), 10)) / somatorio;
                     }
 
                     //Imprimindo informacoes de cada alfa
+                    cout << "----- Informações individuais de cada alfa -----" << endl;
                     for (int k = 0; k < 10; k++){
                         cout << endl;
                         cout << "Alfa: " << alfas[k] << endl;
-                        cout << "   Probabilidade: " << probabilidade[k] << endl;
-                        cout << "   Media de cores: " << media[k] << endl;
-                        cout << "   Numero de iteracoes: " << numIteracoes[k] << endl;
-                        cout << "   Somatorio: " << somaAlfa[k] << endl;
+                        cout << "   Total de vezes escolhido: " << numIteracoes[k] << endl;
+                        cout << "   Somatório de cores de todas as soluções do alfa: " << somaAlfa[k] << endl;
+                        cout << "   Média de cores usadas: " << media[k] << endl;
                     }
+                    cout << "--------------------------------------------------" << endl;
 
-                    //Colorindo o grafo usando o melhor alfa
-                    double prob = 0;      //Probabilidade de escolha do melhor alfa
-                    float melhorAlfa = 0; //Melhor alfa
+                    /*
+                        Verificando qual o melhor alfa e usando ele para colorir o grafo
+
+                        O melhor alfa é escolhido usando os critérios:
+                        - Maior quantidade de iteracoes (logo, teve maior probabilidade de escolha)
+                        - Melhor média de cores utilizadas
+                        - Menor número total de cores utilizadas (logo, no geral as soluções foram melhores)
+                    */
+                    double prob = probabilidade[0];      //Probabilidade de escolha do melhor alfa
+                    float melhorAlfa = alfas[0]; //Melhor alfa
                     unsigned int resultadoMelhorAlfa; //Resultado da coloracao usando o alfa
-                    for (int i = 0; i < 10; i++)
-                    {
-                        if (prob < probabilidade[i])
-                        {
+                    for (int i = 0; i < 10; i++){
+                        if (prob < probabilidade[i]){
                             prob = probabilidade[i];
                             melhorAlfa = alfas[i];
                         }
@@ -496,8 +504,7 @@ int main (int argc, char* argv[]){
                     //Imprimindo os resultados
                     cout << endl;
                     cout << "Melhor alfa: " << melhorAlfa << endl;
-                    cout << "Probabilidade de escolha: " << prob*100 << "%" << endl;
-                    cout << "Total de cores usadas: " << resultadoMelhorAlfa << endl;
+                    cout << "Melhor solução do alfa: " << resultadoMelhorAlfa << endl;
                     cout << endl;
                 }
                 else
