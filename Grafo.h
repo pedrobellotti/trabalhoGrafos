@@ -89,6 +89,7 @@ class Grafo{
         void buscaProf(Vertice*); //Busca em profundidade
         void ordenacaoTopologicaAux(stack<unsigned int>&, Vertice*); //Auxiliar para ordenacao topologica
         void descolore(); //Descolore o grafo (muda a cor de todos os vertices para 0)
+        Vertice* dijkstraAux(int[]); //Auxiliar para algoritmo de Dijkstra
     public:
         Grafo(); //Construtor
         ~Grafo(); //Destrutor
@@ -121,7 +122,7 @@ class Grafo{
         void ordenacaoTopologica();//Imprime ordenacao topologica do grafo
         void agmKruskal(); //Imprime a arvore geradora minima com algoritmo de Kruskal
         void agmPrim(); //Imprime a arvore geradora minima com o algoritmo de Prim
-        void caminhoDijkstra(unsigned int, unsigned int); //Caminho minimo usando algoritmo de Dijkstra
+        void caminhoDijkstra(unsigned int); //Caminho minimo usando algoritmo de Dijkstra
         void caminhoFloyd(unsigned int, unsigned int); //Caminho minimo usando algoritmo de Floyd
         void imprimeCores();
         unsigned int coloreGuloso(); //Algoritmo de coloracao de vertices guloso

@@ -704,12 +704,61 @@ void Grafo::agmPrim(){
 }
 
 /*
+* Função auxiliar para algoritmo de Dijkstra - encontra a menor distancia entre vértices não visitados
+* Parametros: Vetor de distâncias
+*/
+Vertice* Grafo::dijkstraAux(int dist[]){
+    int menorDist = __INT_MAX__;
+    Vertice* menorId = nullptr;
+
+    for (Vertice*v = primeiroVertice; v!=nullptr; v=v->getProximo()){
+        if(v->getVisitado() == false && dist[v->getId()] <= menorDist){
+            menorDist = dist[v->getId()];
+            menorId = v;
+        }
+    }
+    return menorId;
+}
+
+/*
 * Caminho minimo entre dois vertices usando algoritmo de Dijkstra
 * Parametros: IDs dos dois vertices
 */
-void Grafo::caminhoDijkstra(unsigned int origem, unsigned int destino){
-    //Ainda nao feito
-    return;
+void Grafo::caminhoDijkstra(unsigned int origem){
+    //Limpa a marcacao de visitados de todos os vertices
+    limpaVisitados();
+
+    //Cria vetor de distancias
+    int dist[numeroV+1]; //+1 porque os ids dos vertices comecam a partir de 1
+
+    //Inicializando o vetor de distancias com valores infinitos
+    for (int i = 0; i<numeroV+1; i++)
+        dist[i] = __INT_MAX__;
+
+    //Colocando o valor 0 na posição da origem (distancia para o proprio vértice é 0)
+    dist[origem] = 0;
+
+    //Itera para todos os vértices
+    for (int cont = 1; cont < numeroV; cont++){
+        //Pega o vertice de menor distancia entre o vertice e um que ainda nao esteja na solução
+        Vertice* u = dijkstraAux(dist);
+
+        //Seta o vertice encontrado como já visitado
+        u->setVisitado(true);
+
+        //Atualiza o valor de distancias para todos os vértice adjacentes ao vértice escolhido
+        for (Aresta* a = u->getPrimeira(); a!=nullptr; a=a->getProxima()){
+            if(a->getDestino()->getVisitado() == false && dist[u->getId()] != __INT_MAX__ && dist[u->getId()] + a->getPeso() < dist[a->getDestino()->getId()]){
+                dist[a->getDestino()->getId()] = dist[u->getId()] + a->getPeso();
+            }
+        }
+    }
+    //Imprime os resultados
+    cout << endl << "Caminhos mínimos usando algoritmo de Dijkstra." << endl;
+    cout << "Vértice de origem: " << origem << endl;
+    for (int j = 1; j<numeroV+1; j++){
+        cout << "Custo do caminho para o vértice " << j << ": "<< dist[j] << endl;
+    }
 }
 
 /*

@@ -365,13 +365,11 @@ int main (int argc, char* argv[]){
             case 22:{
                 cout << "Digite a ID do vértice origem: ";
                 cin >> ver1;
-                cout << "Digite a ID do vértice destino: ";
-                cin >> ver2;
-                if(g->verificaId(ver1) && g->verificaId(ver2)){
-                    g->caminhoDijkstra(ver1,ver2);
+                if(g->verificaId(ver1)){
+                    g->caminhoDijkstra(ver1);
                 }
                 else
-                    cout << "Algum dos vértices informados não existe no grafo!" << endl;
+                    cout << "O vértice informado não existe no grafo!" << endl;
                 break;
             }
             case 23:{
