@@ -112,6 +112,10 @@ void Grafo::adicionaVertice(unsigned int idnovo){
 * Parametros: IDs dos vertices que formam a aresta, peso da aresta
 */
 void Grafo::adicionaAresta(unsigned int idorigem, unsigned int iddestino, int peso){
+    if(idorigem == iddestino){
+        cout<<"Erro ao adicionar aresta " << idorigem << "-" << iddestino << ": os IDs de origem e destino são iguais!"<<endl;
+        return;
+    }
     Vertice* ori = nullptr;
     Vertice* dest = nullptr;
     //Encontrando a id
@@ -148,7 +152,7 @@ void Grafo::adicionaAresta(unsigned int idorigem, unsigned int iddestino, int pe
         }
     }
     else
-        cout<<"Erro ao adicionar aresta: algum dos vértices não existe no grafo!"<<endl;
+        cout<<"Erro ao adicionar aresta " << idorigem << "-" << iddestino << ": algum dos vértices não existe no grafo!"<<endl;
 }
 
 /*
@@ -757,17 +761,71 @@ void Grafo::caminhoDijkstra(unsigned int origem){
     cout << endl << "Caminhos mínimos usando algoritmo de Dijkstra." << endl;
     cout << "Vértice de origem: " << origem << endl;
     for (int j = 1; j<numeroV+1; j++){
-        cout << "Custo do caminho para o vértice " << j << ": "<< dist[j] << endl;
+        if(dist[j] != __INT_MAX__)
+            cout << "Custo do caminho para o vértice " << j << ": "<< dist[j] << endl;
+        else
+            cout << "Custo do caminho para o vértice " << j << ": Infinito" << endl;
     }
 }
 
 /*
 * Caminho minimo entre dois vertices usando algoritmo de Floyd
-* Parametros: IDs dos dois vertices
+* Parametros: -
 */
-void Grafo::caminhoFloyd(unsigned int origem, unsigned int destino){
-    //Ainda nao feito
-    return;
+void Grafo::caminhoFloyd(){
+    int tam = numeroV+1; //Dimensão da matriz, +1 porque vertice de ID 0 não existe
+    int dist[tam][tam]; //Matriz com as distancias
+    Vertice* k = nullptr;
+    Vertice* v = nullptr;
+    Vertice* u = nullptr;
+
+    //Inicializa a matriz com valores invalidos
+    dist[0][0] = -1; //Posicao invalida
+    for(int k = 1; k<tam; k++){
+        for(int m = 1; m<tam; m++){
+            if(k == m)
+                dist[k][m] = 0;
+            else
+                dist[k][m] = __INT_MAX__;
+        }
+    }
+
+    //Inicializa a matriz com os caminhos minimos diretos, sem considerar vertices intermediarios
+    for(v = primeiroVertice; v!=nullptr; v=v->getProximo()){
+        for (Aresta* a = v->getPrimeira(); a!=nullptr; a=a->getProxima()){
+            dist[v->getId()][a->getDestino()->getId()] = a->getPeso();
+        }
+    }
+
+    //Iterando para todos os vertices
+    for(k = primeiroVertice; k!=nullptr; k=k->getProximo()){
+        //Pegando todos os vertices como origem
+        for(v = primeiroVertice; v!=nullptr; v=v->getProximo()){
+            //Pegando todos os vertices como destino
+            for(u = primeiroVertice; u!=nullptr; u=u->getProximo()){
+                if(dist[k->getId()][u->getId()] != __INT_MAX__ && dist[k->getId()][u->getId()] > 0){
+                    if(dist[v->getId()][k->getId()] != __INT_MAX__ && dist[v->getId()][k->getId()] > 0){
+                        if(dist[v->getId()][k->getId()] + dist[k->getId()][u->getId()] < dist[v->getId()][u->getId()]){
+                            dist[v->getId()][u->getId()] = dist[v->getId()][k->getId()] + dist[k->getId()][u->getId()]; //Atualiza a matriz
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //Imprime os resultados
+    cout << endl << "Caminhos mínimos usando algoritmo de Floyd." << endl;
+    for(int i = 1; i<tam; i++){
+        cout << "Caminhos minimos partindo do vértice " << i << ":"<< endl;
+        for (int j = 1; j<tam; j++){
+            if(dist[i][j] != __INT_MAX__)
+                cout << "   Vertice " << j << ": " << dist[i][j] << endl;
+            else
+                cout << "   Vertice " << j << ": Infinito" << endl;
+        }
+        cout<<endl;
+    }
 }
 
 /* ---------- ALGORITMOS DE COLORAÇÃO DOS VÉRTICES DO GRAFO ---------- */

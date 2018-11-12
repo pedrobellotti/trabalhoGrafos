@@ -123,7 +123,7 @@ class Grafo{
         void agmKruskal(); //Imprime a arvore geradora minima com algoritmo de Kruskal
         void agmPrim(); //Imprime a arvore geradora minima com o algoritmo de Prim
         void caminhoDijkstra(unsigned int); //Caminho minimo usando algoritmo de Dijkstra
-        void caminhoFloyd(unsigned int, unsigned int); //Caminho minimo usando algoritmo de Floyd
+        void caminhoFloyd(); //Caminho minimo usando algoritmo de Floyd
         void imprimeCores();
         unsigned int coloreGuloso(); //Algoritmo de coloracao de vertices guloso
         unsigned int coloreGulosoAleatorio(int,float); //Algoritmo de coloracao de vertices guloso aleatorio

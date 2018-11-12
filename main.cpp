@@ -105,8 +105,8 @@ int main (int argc, char* argv[]){
         cout << "[19]. Apresentar a ordenação topológica do grafo." << endl;
         cout << "[20]. Apresentar uma árvore geradora mínima usando algoritmo de Kruskal." << endl;
         cout << "[21]. Apresentar uma árvore geradora mínima usando algoritmo de Prim." << endl;
-        cout << "[22]. Apresentar o custo do caminho mínimo entre dois vértices com algoritmo de Dijkstra." << endl;
-        cout << "[23]. Apresentar o custo do caminho mínimo entre dois vértices com algoritmo de Floyd." << endl;
+        cout << "[22]. Apresentar o custo do caminho mínimo usando algoritmo de Dijkstra." << endl;
+        cout << "[23]. Apresentar o custo do caminho mínimo usando algoritmo de Floyd." << endl;
         cout << "[24]. Imprimir as cores dos vértices do grafo." << endl;
         cout << "[25]. Fazer a coloração dos vértices do grafo usando algoritmo guloso." << endl;
         cout << "[26]. Fazer a coloração dos vértices do grafo usando algoritmo guloso aleatório." << endl;
@@ -373,15 +373,7 @@ int main (int argc, char* argv[]){
                 break;
             }
             case 23:{
-                cout << "Digite a ID do vértice origem: ";
-                cin >> ver1;
-                cout << "Digite a ID do vértice destino: ";
-                cin >> ver2;
-                if(g->verificaId(ver1) && g->verificaId(ver2)){
-                    g->caminhoFloyd(ver1,ver2);
-                }
-                else
-                    cout << "Algum dos vértices informados não existe no grafo!" << endl;
+                g->caminhoFloyd();
                 break;
             }
             case 24:{
