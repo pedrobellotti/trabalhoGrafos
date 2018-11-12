@@ -9,6 +9,7 @@
 */
 
 #include "Grafo.h"
+#define INF __INT_MAX__ //Infinito
 
 /*
 * Construtor
@@ -703,16 +704,16 @@ void Grafo::agmKruskal(){
 }
 
 /*
-* Função auxiliar para algoritmo de Prim - encontra a chave do menor vértice entre vértices não visitados
-* Parametros: Vetor de chaves
+* Função auxiliar para algoritmo de Prim - encontra a menor distancia entre vértices não visitados
+* Parametros: Vetor de distancias
 */
-Vertice* Grafo::primAux(int chave[]){
-    int menorChave = __INT_MAX__;
+Vertice* Grafo::primAux(int dist[]){
+    int menordist = INF;
     Vertice* menorId = nullptr;
 
     for (Vertice*v = primeiroVertice; v!=nullptr; v=v->getProximo()){
-        if(v->getVisitado() == false && chave[v->getId()] <= menorChave){
-            menorChave = chave[v->getId()];
+        if(v->getVisitado() == false && dist[v->getId()] <= menordist){
+            menordist = dist[v->getId()];
             menorId = v;
         }
     }
@@ -731,26 +732,26 @@ void Grafo::agmPrim(){
     int cont = 0; //Contador de iteracoes
     Vertice* vetorAGM[tam]; //Vetor que armazena os vertices da AGM
     vetorAGM[0] = nullptr; //Posicao invalida (vertices começam com ID 1)
-    int chave[tam]; //Vetor de chaves ("pesos") dos vertices
+    int dist[tam]; //Vetor de distancia entre vertices
 
-    //Inicializando o vetor de chaves com valores infinitos
+    //Inicializando o vetor de distancias com valores infinitos
     for (int i = 0; i<tam; i++)
-        chave[i] = __INT_MAX__;
+        dist[i] = INF;
 
     //Setando o primeiro vertice com valor 0 para que ele seja incluido na AGM
-    chave[1] = 0;
+    dist[1] = 0;
     vetorAGM[1] = primeiroVertice;
 
     //Iterando enquanto o numero de vertices na solucao nao for igual ao numero de vertices do grafo
     while(cont < numeroV){
-        Vertice* u = primAux(chave); //Pega o vertice com a menor chave que ainda nao esteja incluido na AGM
+        Vertice* u = primAux(dist); //Pega o vertice com a menor dist que ainda nao esteja incluido na AGM
         u->setVisitado(true);
 
-        //Atualiza o valor das chaves para todos os vértice adjacentes ao vértice escolhido que não estejam incluidos na AGM
+        //Atualiza o valor das distancias para todos os vértice adjacentes ao vértice escolhido que não estejam incluidos na AGM
         for (Aresta* a = u->getPrimeira(); a!=nullptr; a=a->getProxima()){
-            if(a->getDestino()->getVisitado() == false && a->getPeso() < chave[a->getDestino()->getId()]){
+            if(a->getDestino()->getVisitado() == false && a->getPeso() < dist[a->getDestino()->getId()]){
                 vetorAGM[a->getDestino()->getId()] = u;
-                chave[a->getDestino()->getId()] = a->getPeso();
+                dist[a->getDestino()->getId()] = a->getPeso();
             }
         }
         cont++;
@@ -760,7 +761,7 @@ void Grafo::agmPrim(){
     cout << "Aresta\t" << "Peso" << endl;
     for (int i = 1; i < tam; i++){
         if(vetorAGM[i]->getId() != i && vetorAGM[i]->getId() != 0)
-            cout << vetorAGM[i]->getId() << "-" << i << "\t" << chave[i] << endl; 
+            cout << vetorAGM[i]->getId() << "-" << i << "\t" << dist[i] << endl; 
     }
 }
 
@@ -769,7 +770,7 @@ void Grafo::agmPrim(){
 * Parametros: Vetor de distâncias
 */
 Vertice* Grafo::dijkstraAux(int dist[]){
-    int menorDist = __INT_MAX__;
+    int menorDist = INF;
     Vertice* menorId = nullptr;
 
     for (Vertice*v = primeiroVertice; v!=nullptr; v=v->getProximo()){
@@ -794,7 +795,7 @@ void Grafo::caminhoDijkstra(unsigned int origem){
 
     //Inicializando o vetor de distancias com valores infinitos
     for (int i = 0; i<numeroV+1; i++)
-        dist[i] = __INT_MAX__;
+        dist[i] = INF;
 
     //Colocando o valor 0 na posição da origem (distancia para o proprio vértice é 0)
     dist[origem] = 0;
@@ -809,7 +810,7 @@ void Grafo::caminhoDijkstra(unsigned int origem){
 
         //Atualiza o valor de distancias para todos os vértice adjacentes ao vértice escolhido
         for (Aresta* a = u->getPrimeira(); a!=nullptr; a=a->getProxima()){
-            if(a->getDestino()->getVisitado() == false && dist[u->getId()] != __INT_MAX__ && dist[u->getId()] + a->getPeso() < dist[a->getDestino()->getId()]){
+            if(a->getDestino()->getVisitado() == false && dist[u->getId()] != INF && dist[u->getId()] + a->getPeso() < dist[a->getDestino()->getId()]){
                 dist[a->getDestino()->getId()] = dist[u->getId()] + a->getPeso();
             }
         }
@@ -818,7 +819,7 @@ void Grafo::caminhoDijkstra(unsigned int origem){
     cout << endl << "Caminhos mínimos usando algoritmo de Dijkstra." << endl;
     cout << "Vértice de origem: " << origem << endl;
     for (int j = 1; j<numeroV+1; j++){
-        if(dist[j] != __INT_MAX__)
+        if(dist[j] != INF)
             cout << "Custo do caminho para o vértice " << j << ": "<< dist[j] << endl;
         else
             cout << "Custo do caminho para o vértice " << j << ": Infinito" << endl;
@@ -843,7 +844,7 @@ void Grafo::caminhoFloyd(){
             if(k == m)
                 dist[k][m] = 0;
             else
-                dist[k][m] = __INT_MAX__;
+                dist[k][m] = INF;
         }
     }
 
@@ -860,8 +861,8 @@ void Grafo::caminhoFloyd(){
         for(v = primeiroVertice; v!=nullptr; v=v->getProximo()){
             //Pegando todos os vertices como destino
             for(u = primeiroVertice; u!=nullptr; u=u->getProximo()){
-                if(dist[k->getId()][u->getId()] != __INT_MAX__ && dist[k->getId()][u->getId()] > 0){
-                    if(dist[v->getId()][k->getId()] != __INT_MAX__ && dist[v->getId()][k->getId()] > 0){
+                if(dist[k->getId()][u->getId()] != INF && dist[k->getId()][u->getId()] > 0){
+                    if(dist[v->getId()][k->getId()] != INF && dist[v->getId()][k->getId()] > 0){
                         if(dist[v->getId()][k->getId()] + dist[k->getId()][u->getId()] < dist[v->getId()][u->getId()]){
                             dist[v->getId()][u->getId()] = dist[v->getId()][k->getId()] + dist[k->getId()][u->getId()]; //Atualiza a matriz
                         }
@@ -876,7 +877,7 @@ void Grafo::caminhoFloyd(){
     for(int i = 1; i<tam; i++){
         cout << "Caminhos minimos partindo do vértice " << i << ":"<< endl;
         for (int j = 1; j<tam; j++){
-            if(dist[i][j] != __INT_MAX__)
+            if(dist[i][j] != INF)
                 cout << "   Vertice " << j << ": " << dist[i][j] << endl;
             else
                 cout << "   Vertice " << j << ": Infinito" << endl;
