@@ -116,6 +116,10 @@ void Grafo::adicionaAresta(unsigned int idorigem, unsigned int iddestino, int pe
         cout<<"Erro ao adicionar aresta " << idorigem << "-" << iddestino << ": os IDs de origem e destino são iguais!"<<endl;
         return;
     }
+    if(idorigem == 0)
+        idorigem = numeroV;
+    if(iddestino == 0)
+        iddestino = numeroV;
     Vertice* ori = nullptr;
     Vertice* dest = nullptr;
     //Encontrando a id
@@ -699,12 +703,65 @@ void Grafo::agmKruskal(){
 }
 
 /*
+* Função auxiliar para algoritmo de Prim - encontra a chave do menor vértice entre vértices não visitados
+* Parametros: Vetor de chaves
+*/
+Vertice* Grafo::primAux(int chave[]){
+    int menorChave = __INT_MAX__;
+    Vertice* menorId = nullptr;
+
+    for (Vertice*v = primeiroVertice; v!=nullptr; v=v->getProximo()){
+        if(v->getVisitado() == false && chave[v->getId()] <= menorChave){
+            menorChave = chave[v->getId()];
+            menorId = v;
+        }
+    }
+    return menorId;
+}
+
+/*
 * Imprime a arvore geradora minima do grafo usando algoritmo de Prim
 * Parametros: -
 */
 void Grafo::agmPrim(){
-    //Ainda nao feito
-    return;
+    //Limpa a marcacao de visitados de todos os vertices
+    limpaVisitados();
+
+    int tam = numeroV+1; //Tamanho do vetor
+    int cont = 0; //Contador de iteracoes
+    Vertice* vetorAGM[tam]; //Vetor que armazena os vertices da AGM
+    vetorAGM[0] = nullptr; //Posicao invalida (vertices começam com ID 1)
+    int chave[tam]; //Vetor de chaves ("pesos") dos vertices
+
+    //Inicializando o vetor de chaves com valores infinitos
+    for (int i = 0; i<tam; i++)
+        chave[i] = __INT_MAX__;
+
+    //Setando o primeiro vertice com valor 0 para que ele seja incluido na AGM
+    chave[1] = 0;
+    vetorAGM[1] = primeiroVertice;
+
+    //Iterando enquanto o numero de vertices na solucao nao for igual ao numero de vertices do grafo
+    while(cont < numeroV){
+        Vertice* u = primAux(chave); //Pega o vertice com a menor chave que ainda nao esteja incluido na AGM
+        u->setVisitado(true);
+
+        //Atualiza o valor das chaves para todos os vértice adjacentes ao vértice escolhido que não estejam incluidos na AGM
+        for (Aresta* a = u->getPrimeira(); a!=nullptr; a=a->getProxima()){
+            if(a->getDestino()->getVisitado() == false && a->getPeso() < chave[a->getDestino()->getId()]){
+                vetorAGM[a->getDestino()->getId()] = u;
+                chave[a->getDestino()->getId()] = a->getPeso();
+            }
+        }
+        cont++;
+    }
+
+    //Imprime os resultados
+    cout << "Aresta\t" << "Peso" << endl;
+    for (int i = 1; i < tam; i++){
+        if(vetorAGM[i]->getId() != i && vetorAGM[i]->getId() != 0)
+            cout << vetorAGM[i]->getId() << "-" << i << "\t" << chave[i] << endl; 
+    }
 }
 
 /*

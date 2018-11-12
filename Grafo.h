@@ -90,6 +90,7 @@ class Grafo{
         void ordenacaoTopologicaAux(stack<unsigned int>&, Vertice*); //Auxiliar para ordenacao topologica
         void descolore(); //Descolore o grafo (muda a cor de todos os vertices para 0)
         Vertice* dijkstraAux(int[]); //Auxiliar para algoritmo de Dijkstra
+        Vertice* primAux(int[]); //Auxiliar para algoritmo de Prim
     public:
         Grafo(); //Construtor
         ~Grafo(); //Destrutor

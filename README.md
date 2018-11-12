@@ -38,10 +38,10 @@ digrafos);
 - [ ] apresentar uma árvore geradora mínima usando
 o algoritmo de Kruskal;
 
-- [ ] apresentar uma árvore geradora mínima usando
+- [x] apresentar uma árvore geradora mínima usando
 o algoritmo de Prim;
 
-- [x] aapresentar o custo do caminho mínimo entre
+- [x] apresentar o custo do caminho mínimo entre
 dois vértices informados pelo usuário usando o
 algoritmo de Dijkstra;
 
