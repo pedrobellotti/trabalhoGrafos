@@ -41,11 +41,11 @@ o algoritmo de Kruskal;
 - [ ] apresentar uma árvore geradora mínima usando
 o algoritmo de Prim;
 
-- [x] apresentar o custo do caminho mínimo partindo
-de um vértice de origem informado pelo usuário usando
-o algoritmo de Dijkstra;
+- [x] aapresentar o custo do caminho mínimo entre
+dois vértices informados pelo usuário usando o
+algoritmo de Dijkstra;
 
-- [ ] apresentar o custo do caminho mínimo entre
+- [x] apresentar o custo do caminho mínimo entre
 dois vértices informados pelo usuário usando o
 algoritmo de Floyd;
 
