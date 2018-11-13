@@ -35,7 +35,7 @@ digrafos);
 - [x] apresentar uma ordenação topológica (para
 digrafos);
 
-- [ ] apresentar uma árvore geradora mínima usando
+- [x] apresentar uma árvore geradora mínima usando
 o algoritmo de Kruskal;
 
 - [x] apresentar uma árvore geradora mínima usando
@@ -56,4 +56,6 @@ aleatório
 
 - [x] implementar algoritmo de coloração guloso
 aleatório reativo
+
+- [ ] rodar os testes e fazer o relatório
 
