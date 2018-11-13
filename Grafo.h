@@ -91,6 +91,8 @@ class Grafo{
         void descolore(); //Descolore o grafo (muda a cor de todos os vertices para 0)
         Vertice* dijkstraAux(int[]); //Auxiliar para algoritmo de Dijkstra
         Vertice* primAux(int[]); //Auxiliar para algoritmo de Prim
+        void unir(vector<int>&,int,int);
+        int buscar(vector<int>,int);
     public:
         Grafo(); //Construtor
         ~Grafo(); //Destrutor

@@ -363,17 +363,23 @@ int main (int argc, char* argv[]){
                 break;
             }
             case 22:{
-                cout << "Digite a ID do vértice origem: ";
-                cin >> ver1;
-                if(g->verificaId(ver1)){
-                    g->caminhoDijkstra(ver1);
+                if(g->getPonderado()){
+                    cout << "Digite a ID do vértice origem: ";
+                    cin >> ver1;
+                    if(g->verificaId(ver1))
+                        g->caminhoDijkstra(ver1);
+                    else
+                        cout << "O vértice informado não existe no grafo!" << endl;
                 }
                 else
-                    cout << "O vértice informado não existe no grafo!" << endl;
+                    cout << "Essa função só pode ser executada em grafos ponderados!" << endl;
                 break;
             }
             case 23:{
-                g->caminhoFloyd();
+                if(g->getPonderado())
+                    g->caminhoFloyd();
+                else
+                    cout << "Essa função só pode ser executada em grafos ponderados!" << endl;
                 break;
             }
             case 24:{

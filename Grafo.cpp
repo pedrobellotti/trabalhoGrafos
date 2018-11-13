@@ -695,12 +695,95 @@ void Grafo::ordenacaoTopologica(){
 }
 
 /*
+* Função auxiliar de busca para o algoritmo de Kruskal
+* Parametros: Vetor de subconjuntos e posição do vetor
+*/
+int Grafo::buscar(vector<int> subset, int i){
+    if(subset[i] == -1)
+        return i;
+    return buscar(subset, subset[i]);
+}
+
+/*
+* Função auxiliar para união de subconjuntos para o algoritmo de Kruskal
+* Parametros: Vetor de subconjuntos e posições do vetor para união
+*/
+void Grafo::unir (vector<int> &subset, int s1, int s2){
+    int s1_sub, s2_sub;
+    s1_sub = buscar(subset, s1);
+    s2_sub = buscar(subset, s2);
+    subset[s1_sub] = s2_sub;
+}
+
+/*
+* Função auxiliar para ordenação do vetor do algoritmo de Kruskal
+* Parametros: Posições do vetor
+*/
+bool ordenaPar(pair<int,Aresta*> a, pair<int,Aresta*> b){
+    if(a.second->getPeso() < b.second->getPeso())
+        return true;
+    else
+        return false;
+}
+
+/*
 * Imprime a arvore geradora minima do grafo usando algoritmo de Kruskal
 * Parametros: -
 */
 void Grafo::agmKruskal(){
-    //Ainda nao feito
-    return;
+    //Variaveis para iteracao
+    int i, s1, s2;
+
+    //Resultado
+    int tamanhoArvore, pesoTotal = 0;
+
+    //Vetor com o resultado
+    vector<pair<int,Aresta*>> arvore;
+
+    //Inicializa um vetor de pares (ID vertice, aresta) para ordenação
+    vector<pair<int,Aresta*>> arestas;
+    pair<int,Aresta*> par;
+    //Adiciona todas as arestas no vetor
+    for (Vertice*v = primeiroVertice; v!=nullptr; v=v->getProximo()){
+        for (Aresta* a = v->getPrimeira(); a != nullptr; a=a->getProxima()){
+            if(!a->getEquivalente()){
+                par.first = v->getId();
+                par.second = a;
+                arestas.push_back(par);
+            }
+        }
+    }
+
+    //Ordena de acordo com os pesos das arestas
+    sort(arestas.begin(), arestas.end(), ordenaPar);
+
+    //Criando subconjuntos e inicializando todos com -1
+    vector<int> subset;
+    for(i = 0; i < numeroV; i++){
+        subset.push_back(-1);
+    }
+
+    //Buscando e unindo diferentes subconjuntos
+    for(i = 0; i<arestas.size(); i++){
+        s1 = buscar(subset, arestas[i].first);
+        s2 = buscar(subset, arestas[i].second->getDestino()->getId());
+        
+        //Se o subconjunto s1 for diferente do subconjunto s2, significa que não forma ciclo
+        if(s1 != s2){
+            arvore.push_back(arestas[i]);
+            unir(subset, s1, s2);
+        }
+    }
+
+    //Após unir todos os subconjuntos, imprime o subconjunto resultado
+    tamanhoArvore = arvore.size();
+    cout << "Árvore geradora mínima usando algoritmo de Kruskal." << endl;
+    cout << "Aresta\t" << "Peso" << endl;
+    for (i = 0; i < tamanhoArvore; i++){
+        cout << arvore[i].first << "-" << arvore[i].second->getDestino()->getId() << "\t" << arvore[i].second->getPeso() << endl;
+        pesoTotal += arvore[i].second->getPeso();
+    }
+    cout << "Soma dos pesos: " << pesoTotal << endl;
 }
 
 /*
@@ -733,6 +816,7 @@ void Grafo::agmPrim(){
     Vertice* vetorAGM[tam]; //Vetor que armazena os vertices da AGM
     vetorAGM[0] = nullptr; //Posicao invalida (vertices começam com ID 1)
     int dist[tam]; //Vetor de distancia entre vertices
+    int pesoTotal = 0; //Peso total da AGM
 
     //Inicializando o vetor de distancias com valores infinitos
     for (int i = 0; i<tam; i++)
@@ -758,11 +842,15 @@ void Grafo::agmPrim(){
     }
 
     //Imprime os resultados
+    cout << "Árvore geradora mínima usando algoritmo de Prim." << endl;
     cout << "Aresta\t" << "Peso" << endl;
     for (int i = 1; i < tam; i++){
-        if(vetorAGM[i]->getId() != i && vetorAGM[i]->getId() != 0)
-            cout << vetorAGM[i]->getId() << "-" << i << "\t" << dist[i] << endl; 
+        if(vetorAGM[i]->getId() != i && vetorAGM[i]->getId() != 0 && dist[i] != INF){
+            cout << vetorAGM[i]->getId() << "-" << i << "\t" << dist[i] << endl;
+            pesoTotal += dist[i];
+        } 
     }
+    cout << "Soma dos pesos: " << pesoTotal << endl;
 }
 
 /*
@@ -832,7 +920,7 @@ void Grafo::caminhoDijkstra(unsigned int origem){
 */
 void Grafo::caminhoFloyd(){
     int tam = numeroV+1; //Dimensão da matriz, +1 porque vertice de ID 0 não existe
-    int dist[tam][tam]; //Matriz com as distancias
+    vector< vector<int> > dist(tam, vector<int>(tam)); //Matriz com as distancias
     Vertice* k = nullptr;
     Vertice* v = nullptr;
     Vertice* u = nullptr;
