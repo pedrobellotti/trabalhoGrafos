@@ -735,7 +735,7 @@ void Grafo::agmKruskal(){
     int i, s1, s2;
 
     //Resultado
-    int tamanhoArvore, pesoTotal = 0;
+    unsigned int tamanhoArvore, pesoTotal = 0;
 
     //Vetor com o resultado
     vector<pair<int,Aresta*>> arvore;
@@ -783,6 +783,8 @@ void Grafo::agmKruskal(){
         cout << arvore[i].first << "-" << arvore[i].second->getDestino()->getId() << "\t" << arvore[i].second->getPeso() << endl;
         pesoTotal += arvore[i].second->getPeso();
     }
+    cout << endl;
+    cout << "Número de arestas usadas: " << tamanhoArvore << endl;
     cout << "Soma dos pesos: " << pesoTotal << endl;
 }
 
@@ -817,6 +819,7 @@ void Grafo::agmPrim(){
     vetorAGM[0] = nullptr; //Posicao invalida (vertices começam com ID 1)
     int dist[tam]; //Vetor de distancia entre vertices
     int pesoTotal = 0; //Peso total da AGM
+    unsigned int tamanhoArvore = 0; //Tamanho da arvore
 
     //Inicializando o vetor de distancias com valores infinitos
     for (int i = 0; i<tam; i++)
@@ -848,8 +851,11 @@ void Grafo::agmPrim(){
         if(vetorAGM[i]->getId() != i && vetorAGM[i]->getId() != 0 && dist[i] != INF){
             cout << vetorAGM[i]->getId() << "-" << i << "\t" << dist[i] << endl;
             pesoTotal += dist[i];
+            tamanhoArvore++;
         } 
     }
+    cout << endl;
+    cout << "Número de arestas usadas: " << tamanhoArvore << endl;
     cout << "Soma dos pesos: " << pesoTotal << endl;
 }
 
@@ -871,8 +877,8 @@ Vertice* Grafo::dijkstraAux(int dist[]){
 }
 
 /*
-* Caminho minimo entre dois vertices usando algoritmo de Dijkstra
-* Parametros: IDs dos dois vertices
+* Caminho minimo entre os vertices usando algoritmo de Dijkstra
+* Parametros: ID do vertice de origem
 */
 void Grafo::caminhoDijkstra(unsigned int origem){
     //Limpa a marcacao de visitados de todos os vertices
@@ -915,7 +921,7 @@ void Grafo::caminhoDijkstra(unsigned int origem){
 }
 
 /*
-* Caminho minimo entre dois vertices usando algoritmo de Floyd
+* Caminho minimo entre os vertices usando algoritmo de Floyd
 * Parametros: -
 */
 void Grafo::caminhoFloyd(){
