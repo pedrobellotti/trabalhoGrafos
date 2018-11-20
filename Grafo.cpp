@@ -786,6 +786,8 @@ void Grafo::agmKruskal(){
     cout << endl;
     cout << "Número de arestas usadas: " << tamanhoArvore << endl;
     cout << "Soma dos pesos: " << pesoTotal << endl;
+    arvore.clear();
+    arestas.clear();
 }
 
 /*
@@ -978,6 +980,7 @@ void Grafo::caminhoFloyd(){
         }
         cout<<endl;
     }
+    dist.clear();
 }
 
 /* ---------- ALGORITMOS DE COLORAÇÃO DOS VÉRTICES DO GRAFO ---------- */

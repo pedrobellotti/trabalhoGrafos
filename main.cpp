@@ -14,6 +14,7 @@
 #include <sstream>
 #include "Grafo.h"
 #include <random>
+#include <ctime>
 
 using namespace std;
 
@@ -403,19 +404,31 @@ int main (int argc, char* argv[]){
                     cin >> seed;
                     unsigned int melhorResultado = g->getNumeroV();
                     unsigned int resultadoAtual;
+                    unsigned int melhorIteracao = 0;
+                    long double tempoGasto = 0;
+                    clock_t relogioInicio;
+                    clock_t relogioFinal;
                     float vetAlfas[3] = {0.10, 0.20, 0.30};
                     //Itera 500 vezes para cada alfa (10%,20%,30%)
                     for (int alfa = 0; alfa < 3; alfa++){
                         cout << "Usando alfa = " << vetAlfas[alfa] << endl;
+                        relogioInicio = clock();
                         for(int iteracoes = 0; iteracoes < 500; iteracoes++){
                             resultadoAtual = g->coloreGulosoAleatorio(seed, vetAlfas[alfa]);
-                            if(resultadoAtual < melhorResultado)
+                            if(resultadoAtual < melhorResultado){
                                 melhorResultado = resultadoAtual;
+                                melhorIteracao = iteracoes;
+                            }
                         }
                         // Ao terminar as 500 iteracoes para o alfa atual, imprime o melhor resultado
-                        cout << "Total de cores usadas com o alfa atual: " << melhorResultado << endl;
+                        relogioFinal = clock();
+                        tempoGasto = 1000.0 * (relogioFinal-relogioInicio) / CLOCKS_PER_SEC;
+                        cout << "Menor total de cores usadas com o alfa atual: " << melhorResultado << endl;
+                        cout << "Resultado obtido na iteracao: " << melhorIteracao << endl;
+                        cout << "Tempo de CPU usado: " << tempoGasto/1000.0 << " segundos"<< endl;
                         cout << endl;
                         melhorResultado = g->getNumeroV(); //Resetando melhor resultado para o proximo alfa
+                        melhorIteracao = 0; //Resetando o indice de melhor iteracao
                     }
                 }
                 else
@@ -424,6 +437,8 @@ int main (int argc, char* argv[]){
             }
             case 27:{
                 if(!g->getDirecionado()){
+                    clock_t relogioInicioReativo;
+                    clock_t relogioFinalReativo;
                     int seedReativo;
                     cout << "Digite a seed que será usada: ";
                     cin >> seedReativo;
@@ -441,6 +456,7 @@ int main (int argc, char* argv[]){
                     int it = 0;
 
                     //Iterando 2000 vezes
+                    relogioInicioReativo = clock();
                     for(int i=0; i<2000; i++){
                        //Somando as probabilidades para escolher uma posicao
                        somaProb[0] = probabilidade[0];
@@ -460,11 +476,18 @@ int main (int argc, char* argv[]){
                         //Constroi a solucao com o alfa escolhido
                         somaAlfa[posRandom] += g->coloreGulosoAleatorio(seedReativo, alfas[posRandom]);
                         numIteracoes[posRandom]++;
-                        media[posRandom] = somaAlfa[posRandom]/numIteracoes[posRandom];
 
-                        //Atualizando a probabilidade de escolha do alfa escolhido
-                        somatorio += pow((1 / media[posRandom]), 10);
-                        probabilidade[posRandom] = (pow((1 / media[posRandom]), 10)) / somatorio;
+                        if(i%200 == 0){
+                            //Atualizando a probabilidade de escolha dos alfas
+                            for (it = 0; it < 10; it++){
+                                somatorio = 0;
+                                if(numIteracoes[it] != 0){
+                                    media[it] = somaAlfa[it]/numIteracoes[it];
+                                    somatorio += pow((1 / media[it]), 10);
+                                    probabilidade[it] = (pow((1 / media[it]), 10)) / somatorio;
+                                }
+                            }
+                        }
                     }
 
                     //Imprimindo informacoes de cada alfa
@@ -502,6 +525,11 @@ int main (int argc, char* argv[]){
                     cout << "Melhor alfa: " << melhorAlfa << endl;
                     cout << "Melhor solução do alfa: " << resultadoMelhorAlfa << endl;
                     cout << endl;
+
+                    //Tempo de CPU
+                    relogioFinalReativo = clock();
+                    long double tempoGastoReativo = 1000.0 * (relogioFinalReativo-relogioInicioReativo) / CLOCKS_PER_SEC;
+                    cout << "Tempo de CPU usado: " << tempoGastoReativo/1000.0 << " segundos" << endl;
                 }
                 else
                     cout << "Essa função só pode ser executada em grafos não direcionados!" << endl;
