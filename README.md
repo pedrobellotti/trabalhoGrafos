@@ -4,13 +4,16 @@
 Instâncias e resultados obtidos em: https://cse.unl.edu/~tnguyen/npbenchmarks/graphcoloring.html
 
 Pequenas:
+
 |   Nome   | Vertices | Arestas | Solução |
 |:--------:|:--------:|:-------:|:-------:|
 |  myciel3 |    11    |    20   |    4    |
 |  myciel4 |    23    |    71   |    5    |
 | queen5_5 |    25    |   160   |    5    |
 
+
 Médias:
+
 |   Nome   | Vértices | Arestas | Solução |
 |:--------:|:--------:|:-------:|:-------:|
 | games120 |    120   |   638   |    9    |
@@ -18,7 +21,9 @@ Médias:
 | mulsoli1 |    197   |   3925  |    49   |
 | zeroini3 |    206   |   3540  |    30   |
 
+
 Grandes:
+
 |   Nome   | Vértices | Arestas | Solução |
 |:--------:|:--------:|:-------:|:-------:|
 | fpsol2i3 |    425   |   8688  |    30   |
