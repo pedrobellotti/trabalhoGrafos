@@ -444,8 +444,11 @@ int main (int argc, char* argv[]){
                     cin >> seedReativo;
 
                     float alfas[10] = {0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50};
-                    int somaAlfa[10] = {0};
-                    int numIteracoes[10] = {0};
+                    unsigned int somaAlfa[10] = {0};
+                    unsigned int numIteracoes[10] = {0};
+                    unsigned int piorSolucao = g->getNumeroV();
+                    unsigned int melhoresSolucoes[10] = {piorSolucao,piorSolucao,piorSolucao,piorSolucao,piorSolucao,piorSolucao,piorSolucao,piorSolucao,piorSolucao,piorSolucao};
+                    unsigned int solucaoAtual = 0;
                     double media[10] = {0};
                     double probabilidade[10] = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
                     double somatorio = 0.0;
@@ -474,13 +477,15 @@ int main (int argc, char* argv[]){
                         posRandom = it;
 
                         //Constroi a solucao com o alfa escolhido
-                        somaAlfa[posRandom] += g->coloreGulosoAleatorio(seedReativo, alfas[posRandom]);
+                        solucaoAtual = g->coloreGulosoAleatorio(seedReativo, alfas[posRandom]);
+                        somaAlfa[posRandom] += solucaoAtual;
                         numIteracoes[posRandom]++;
+                        if(melhoresSolucoes[posRandom] > solucaoAtual)
+                            melhoresSolucoes[posRandom] = solucaoAtual;
 
                         if(i%200 == 0){
                             //Atualizando a probabilidade de escolha dos alfas
                             for (it = 0; it < 10; it++){
-                                somatorio = 0;
                                 if(numIteracoes[it] != 0){
                                     media[it] = somaAlfa[it]/numIteracoes[it];
                                     somatorio += pow((1 / media[it]), 10);
@@ -509,16 +514,16 @@ int main (int argc, char* argv[]){
                         - Melhor média de cores utilizadas
                         - Menor número total de cores utilizadas (logo, no geral as soluções foram melhores)
                     */
-                    double prob = probabilidade[0];      //Probabilidade de escolha do melhor alfa
+                    double prob = probabilidade[0]; //Probabilidade de escolha do melhor alfa
                     float melhorAlfa = alfas[0]; //Melhor alfa
-                    unsigned int resultadoMelhorAlfa; //Resultado da coloracao usando o alfa
+                    unsigned int resultadoMelhorAlfa = melhoresSolucoes[0]; //Resultado da coloracao usando o alfa
                     for (int i = 0; i < 10; i++){
                         if (prob < probabilidade[i]){
                             prob = probabilidade[i];
                             melhorAlfa = alfas[i];
+                            resultadoMelhorAlfa = melhoresSolucoes[i];
                         }
                     }
-                    resultadoMelhorAlfa = g->coloreGulosoAleatorio(seedReativo, melhorAlfa);
 
                     //Imprimindo os resultados
                     cout << endl;

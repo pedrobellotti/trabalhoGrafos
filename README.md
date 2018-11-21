@@ -1,5 +1,32 @@
 # trabalhoGrafos
 
+# Instancias
+Instâncias e resultados obtidos em: https://cse.unl.edu/~tnguyen/npbenchmarks/graphcoloring.html
+
+Pequenas:
+|   Nome   | Vertices | Arestas | Solução |
+|:--------:|:--------:|:-------:|:-------:|
+|  myciel3 |    11    |    20   |    4    |
+|  myciel4 |    23    |    71   |    5    |
+| queen5_5 |    25    |   160   |    5    |
+
+Médias:
+|   Nome   | Vértices | Arestas | Solução |
+|:--------:|:--------:|:-------:|:-------:|
+| games120 |    120   |   638   |    9    |
+|   anna   |    138   |   493   |    11   |
+| mulsoli1 |    197   |   3925  |    49   |
+| zeroini3 |    206   |   3540  |    30   |
+
+Grandes:
+|   Nome   | Vértices | Arestas | Solução |
+|:--------:|:--------:|:-------:|:-------:|
+| fpsol2i3 |    425   |   8688  |    30   |
+|   homer  |    561   |   1629  |    13   |
+| inithxi1 |    864   |  18707  |    54   |
+
+
+# Funcionalidades
 - [x] leitura de arquivo (conforme entrada) e
 escrita em arquivo no mesmo modelo da entrada;
 
