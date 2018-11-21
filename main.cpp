@@ -402,6 +402,7 @@ int main (int argc, char* argv[]){
                     int seed;
                     cout << "Digite a seed que será usada: ";
                     cin >> seed;
+                    srand(seed);
                     unsigned int melhorResultado = g->getNumeroV();
                     unsigned int resultadoAtual;
                     unsigned int melhorIteracao = 0;
@@ -414,7 +415,7 @@ int main (int argc, char* argv[]){
                         cout << "Usando alfa = " << vetAlfas[alfa] << endl;
                         relogioInicio = clock();
                         for(int iteracoes = 0; iteracoes < 500; iteracoes++){
-                            resultadoAtual = g->coloreGulosoAleatorio(seed, vetAlfas[alfa]);
+                            resultadoAtual = g->coloreGulosoAleatorio(rand(), vetAlfas[alfa]);
                             if(resultadoAtual < melhorResultado){
                                 melhorResultado = resultadoAtual;
                                 melhorIteracao = iteracoes;
