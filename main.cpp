@@ -77,6 +77,10 @@ int main (int argc, char* argv[]){
         g->alteraDirecionado(true);
     criaGrafo(g, nomeEntrada);
 
+    //Variaveis do tempo de execucao
+    clock_t relogioInicio;
+    clock_t relogioFinal;
+
     //Variaveis do menu
     unsigned int ver, ver1, ver2, k;
     int peso;
@@ -391,8 +395,12 @@ int main (int argc, char* argv[]){
                 break;
             }
             case 25:{
-                if(!g->getDirecionado())
+                if(!g->getDirecionado()){
+                    relogioInicio = clock();
                     cout << "Total de cores usadas com algoritmo guloso: " << g->coloreGuloso() << endl;
+                    relogioFinal = clock();
+                    cout << "Tempo de CPU usado: " << (1000.0 * (relogioFinal-relogioInicio) / CLOCKS_PER_SEC)/1000.0 << " segundos"<< endl;
+                }
                 else
                     cout << "Essa função só pode ser executada em grafos não direcionados!" << endl;
                 break;
@@ -407,8 +415,6 @@ int main (int argc, char* argv[]){
                     unsigned int resultadoAtual;
                     unsigned int melhorIteracao = 0;
                     long double tempoGasto = 0;
-                    clock_t relogioInicio;
-                    clock_t relogioFinal;
                     float vetAlfas[3] = {0.10, 0.20, 0.30};
                     //Itera 500 vezes para cada alfa (10%,20%,30%)
                     for (int alfa = 0; alfa < 3; alfa++){
