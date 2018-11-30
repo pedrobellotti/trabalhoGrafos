@@ -89,5 +89,5 @@ aleatório
 - [x] implementar algoritmo de coloração guloso
 aleatório reativo
 
-- [ ] rodar os testes e fazer o relatório
+- [x] rodar os testes e fazer o relatório
 
